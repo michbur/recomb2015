@@ -28,4 +28,5 @@ three_n_power <- pblapply(1L:60, function(dummy_variable) {
   })
 })
 
+save(three_n_power, file = "three_n_power.RData")
 
