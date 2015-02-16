@@ -23,11 +23,15 @@ three_n_power <- pblapply(1L:100, function(dummy_variable) {
       seqs_ngrams <- count_ngrams(seqs, ngram_size, 1L:4, pos = TRUE)
       #only 1000 repetitions for monte carlo
       ig_test1 <- test_features(targets, seqs_ngrams)
-      browser()
+      signif_ngrams <- cut(ig_test1, breaks = c(0, 1e-02, 1))[[1]]
       #[1] - significant n-grams found on position chosen_nuc
       #[2] - total number of significant n-grams
-      c(length(position_ngrams(cut(ig_test1)[[1]])[[as.character(chosen_nuc)]]),
-        length(cut(ig_test1)[[1]]))
+      if(length(signif_ngrams) > 0) {
+        c(length(position_ngrams(signif_ngrams)[[as.character(chosen_nuc)]]),
+          length(signif_ngrams))
+      } else {
+        c(0, 0)
+      }
     })
   })
 })
