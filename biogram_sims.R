@@ -6,11 +6,12 @@ library(pbapply)
 #create a vector of targets
 targets <- c(rep(1, 2000), rep(0, 2000))
 #we will repeat test 60 times (only 60 because of the computational limitations)
-three_n_power <- pblapply(1L:60, function(dummy_variable) {
+three_n_power <- pblapply(1L:100, function(dummy_variable) {
   #generate 4000 totally random 20-nucleotides RNA sequences without any pattern among positive or negative cases
   seqs <- matrix(sample(1L:4, 20*4000, replace = TRUE), nrow = 4000)
   storage.mode(seqs) <- "integer"
-  chosen_nuc <- sample(1L:20, 1)
+  #2L:19 to eliminate border cases
+  chosen_nuc <- sample(2L:19, 1)
   lapply(seq(from = 0.25, to = 0.91, length.out = 6), function(prop_signif) {  
     #change random nucleotide for positive cases to favor one 
     #nucleotide
@@ -22,8 +23,11 @@ three_n_power <- pblapply(1L:60, function(dummy_variable) {
       seqs_ngrams <- count_ngrams(seqs, ngram_size, 1L:4, pos = TRUE)
       #only 1000 repetitions for monte carlo
       ig_test1 <- test_features(targets, seqs_ngrams)
-      #calculate how many features are significant
-      c(chosen_nuc, names(ig_test1[ig_test1 < 0.01]))
+      browser()
+      #[1] - significant n-grams found on position chosen_nuc
+      #[2] - total number of significant n-grams
+      c(length(position_ngrams(cut(ig_test1)[[1]])[[as.character(chosen_nuc)]]),
+        length(cut(ig_test1)[[1]]))
     })
   })
 })
