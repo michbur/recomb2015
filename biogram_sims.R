@@ -6,7 +6,7 @@ library(pbapply)
 #create a vector of targets
 targets <- c(rep(1, 2000), rep(0, 2000))
 #we will repeat test 60 times (only 60 because of the computational limitations)
-three_n_power <- pblapply(1L:300, function(dummy_variable) {
+three_n_power <- pblapply(1L:150, function(dummy_variable) {
   #generate 4000 totally random 20-nucleotides RNA sequences without any pattern among positive or negative cases
   seqs <- matrix(sample(1L:4, 20*4000, replace = TRUE), nrow = 4000)
   storage.mode(seqs) <- "integer"
