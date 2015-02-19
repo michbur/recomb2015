@@ -12,12 +12,16 @@ power <- Reduce("+", lapply(three_n_power, function(single_rep) {
 }))/length(three_n_power)
 
 #false significant
-false <- Reduce("+", lapply(three_n_power, function(single_rep) {
-  #single replication dat
-  sr_dat <- do.call(rbind, lapply(single_rep, unlist))
-  res <- (sr_dat[, c(2, 4, 6)] - sr_dat[, c(1, 3, 5)])/sr_dat[, c(2, 4, 6)]
-  #how to handle NaNs?situation, when we have 0 significant features?
-  #current klugde - treat them as 0.
-  res[is.nan(res)] <- 0
-  res
-}))/length(three_n_power)
+#mean which ignores NaNs
+mean_nonan <- function(x)
+  sum(x[!is.nan(x)])/sum(!is.nan(x))
+  
+
+matrix(sapply(1L:18, function(position) 
+  mean_nonan(unlist(lapply(three_n_power, function(single_rep) {
+    #single replication dat
+    sr_dat <- do.call(rbind, lapply(single_rep, unlist))
+    ((sr_dat[, c(2, 4, 6)] - sr_dat[, c(1, 3, 5)])/sr_dat[, c(2, 4, 6)])[position]
+  })))), ncol = 3, byrow = FALSE)
+  
+  
