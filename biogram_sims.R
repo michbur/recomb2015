@@ -36,6 +36,6 @@ three_n_power <- pblapply(1L:200, function(dummy_variable) {
   })
 })
 
-#dfon't overwrite data
+#don't overwrite simulations
 #save(three_n_power, file = "three_n_power.RData")
 
