@@ -1,4 +1,14 @@
-length(three_n_power)
+library(abind)
+library(reshape2)
+
+#result matrix to data frame - for easy ggplot2 graphics
+tfres <- function(x, cn = c("1-ngram", "2-gram", "3-gram"),
+                  rn = round(seq(from = 0.25, to = 0.91, length.out = 6), 2)) {
+  colnames(x) <- cn
+  rownames(x) <- rn
+  melt(x)
+}
+  
 
 #excluding third one, for some weird reason it has 5 n-grams on one positions, don't know why
 #check position_ngrams
@@ -15,13 +25,17 @@ power <- Reduce("+", lapply(three_n_power, function(single_rep) {
 #mean which ignores NaNs
 mean_nonan <- function(x)
   sum(x[!is.nan(x)])/sum(!is.nan(x))
-  
 
-matrix(sapply(1L:18, function(position) 
-  mean_nonan(unlist(lapply(three_n_power, function(single_rep) {
-    #single replication dat
-    sr_dat <- do.call(rbind, lapply(single_rep, unlist))
-    ((sr_dat[, c(2, 4, 6)] - sr_dat[, c(1, 3, 5)])/sr_dat[, c(2, 4, 6)])[position]
-  })))), ncol = 3, byrow = FALSE)
+fs_dat <- sapply(three_n_power, function(single_rep) {
+  #single replication dat
+  sr_dat <- do.call(rbind, lapply(single_rep, unlist))
+  (sr_dat[, c(2, 4, 6)] - sr_dat[, c(1, 3, 5)])/sr_dat[, c(2, 4, 6)]
+})
   
-  
+fs_mean <- matrix(apply(fs_dat, 1, mean_nonan), nrow = 6)
+
+#no significant features at all
+matrix(apply(fs_dat, 1, function(i)
+  sum(is.nan(i))), nrow = 6)
+
+
