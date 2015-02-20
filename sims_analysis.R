@@ -1,12 +1,15 @@
-library(abind)
 library(reshape2)
+library(ggplot2)
 
-#result matrix to data frame - for easy ggplot2 graphics
 tfres <- function(x, cn = c("1-ngram", "2-gram", "3-gram"),
                   rn = round(seq(from = 0.25, to = 0.91, length.out = 6), 2)) {
   colnames(x) <- cn
   rownames(x) <- rn
-  melt(x)
+  x <- melt(x)
+  #significant proportion, ngram, value
+  colnames(x) <- c("sig", "ngram", "value")
+  x[["sig"]] <- as.factor(x[["sig"]])
+  x
 }
   
 
@@ -38,4 +41,6 @@ fs_mean <- matrix(apply(fs_dat, 1, mean_nonan), nrow = 6)
 matrix(apply(fs_dat, 1, function(i)
   sum(is.nan(i))), nrow = 6)
 
+#do 1-grams have bigger power
+ggplot(tfres(power), aes(x = sig, y = ngram, fill = value)) + geom_tile()
 
