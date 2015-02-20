@@ -44,3 +44,5 @@ matrix(apply(fs_dat, 1, function(i)
 #do 1-grams have bigger power
 ggplot(tfres(power), aes(x = sig, y = ngram, fill = value)) + geom_tile()
 
+
+ggplot(tfres(fs_mean), aes(x = sig, y = ngram, fill = value)) + geom_tile()
