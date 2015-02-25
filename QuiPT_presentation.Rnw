@@ -1,0 +1,403 @@
+\documentclass[10pt]{beamer}
+\usetheme{Warsaw}
+\usepackage{graphicx}
+\usepackage[utf8]{inputenc}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage[notocbib]{apacite}
+
+
+\setbeamertemplate{caption}{\centering\insertcaption\par}
+\setlength{\belowcaptionskip}{15pt}
+\renewcommand{\thetable}{}
+
+\providecommand{\e}[1]{\ensuremath{\times 10^{#1}}}
+
+\begin{document}
+
+
+\date{}
+\author{Piotr Sobczyk\inst{1}, Micha\l{}  Burdukiewicz\inst{2}}
+\institute{ 
+\inst{1} Wroc\l{}aw University of Technology, Institute of Mathematics and Computer Science, Poland \and \inst{2} University of Wroc\l{}aw, Department of Genomics, Poland}
+
+\title{Quick Permutation Test (QuiPT)}
+
+
+\begin{frame}
+\maketitle
+\end{frame}
+
+\begin{frame}
+\frametitle{Outline}
+\tableofcontents
+\end{frame}
+
+
+\AtBeginSection[]
+{
+\begin{frame}<beamer>
+\frametitle{Outline}
+\tableofcontents[currentsection]
+\end{frame}
+}
+
+
+
+
+\section{n-grams}
+
+\subsection{n-gram definition}
+
+
+\begin{frame}
+
+n-grams (k-tuples) are sets of n characters derived from the input sequence(s). They may form continuous sub-sequences or be discontinuous.
+
+\end{frame}
+
+
+
+\begin{frame}
+
+
+<<echo = FALSE,message=FALSE,results='asis'>>=
+
+library(xtable)
+library(biogram)
+library(ggplot2)
+library(reshape2)
+
+pres_theme <- theme(axis.text=element_text(size=16),
+        axis.title=element_text(size=18,face="bold"))
+
+tfres <- function(x, cn = c("1-ngram", "2-gram", "3-gram"),
+                  rn = round(seq(from = 0.25, to = 0.91, length.out = 6), 2)) {
+  colnames(x) <- cn
+  rownames(x) <- rn
+  x <- melt(x)
+  #significant proportion, ngram, value
+  colnames(x) <- c("sig", "ngram", "value")
+  x[["sig"]] <- as.factor(x[["sig"]])
+  x
+}
+  
+
+sample_seq <- matrix(sample(1L:4, 18, replace = TRUE), nrow = 3)
+print(xtable(data.frame(sample_seq), caption = "Sample sequences.", digits = 0))
+@
+\end{frame}
+
+\begin{frame}
+
+
+<<echo = FALSE,message=FALSE,results='asis'>>=
+unis <- count_ngrams(sample_seq, 1, 1L:4)
+unis <- data.frame(as.matrix(unis))
+colnames(unis) <- 1L:4
+print(xtable(unis, caption = "Unigrams.", digits = 0), include.rownames = FALSE)
+@
+\end{frame}
+
+
+\subsection{Positioned n-grams}
+
+
+\begin{frame}
+
+
+<<echo = FALSE,message=FALSE,results='asis'>>=
+unis <- count_ngrams(sample_seq, 1, 1L:4, pos = TRUE)
+unis <- data.frame(as.matrix(unis))[, 1L:7]
+print(xtable(unis, caption = "Part of possible unigrams with position information.", digits = 0), include.rownames = FALSE)
+@
+
+Positioned n-gram data is binary.
+
+\end{frame}
+
+\begin{frame}
+
+Number of possible positioned n-grams:
+
+$$
+n_{max} = L \times m^n
+$$
+\end{frame}
+
+\begin{frame}
+\centering
+\scalebox{0.75}{  
+<<echo = FALSE,message=FALSE,fig.align='center'>>=
+library(reshape2)
+n <- 1:5
+n_max <- 4^n
+
+dat <- melt(sapply(2:5*5, function(i) i * n_max))
+dat[["Var2"]] <- factor(dat[["Var2"]])
+levels(dat[["Var2"]]) <- 2:5*5
+colnames(dat) <- c("n", "L", "n_max")
+ggplot(dat, aes(x = n, y = n_max, fill = L, col = L)) + 
+  geom_line(linetype="dotted", size=1.5) + 
+  geom_point(size=7, shape=21) +
+  scale_x_continuous(breaks = 0L:6) +
+  pres_theme
+
+@
+}
+\end{frame}
+
+\section{Permutation test}
+
+\begin{frame}
+\begin{enumerate}
+\item<1-> Calculate test statistic for the given positioned n-gram and etiquettes ($T_R$).
+\item<2-> Permute counts of n-grams and calculate permuted test statistic  ($T_P$).  
+\item<3-> Repeat step 2. N times.  
+\item<4-> Calculate p-value using:
+$$\textnormal{p-value} = \frac{N_{T_P > T_R}}{N}$$
+$N_{T_P > T_R}$ is number of times when $T_P$ was bigger than $T_R$
+\end{enumerate}
+\end{frame}
+
+\subsection{Advantages}
+
+\begin{frame}
+\begin{itemize}
+\item<1-> Model independent.
+\item<2-> Statistic independent.  
+\end{itemize}
+\end{frame}
+
+\subsection{Drawbacks}
+
+\begin{frame}
+\begin{itemize}
+\item<1-> Computationally expensive (number of cases, number of features).
+\item<2-> Single feature analysis (no feature interaction).  
+\end{itemize}
+\end{frame}
+
+\subsection{p-value resolution}
+
+\begin{frame}
+The number of permutations is inversely proportional to the resolution of p-value.
+
+\smallskip
+
+Example: with 10\e{6} permutation the smallest possible p-values are: 0, 1\e{-6}, 2\e{-6} and so on.
+
+\end{frame}
+
+\section{QuiPT}
+
+\subsection{Contingency tables}
+
+\begin{frame}
+The binary positioned n-gram data tabulated by binary label can be easily described in 2d 
+contingency table.
+\end{frame}
+
+
+\begin{frame}
+
+\begin{table}
+\begin{tabular}{c || c c }
+sequence ID & feature    & target   &  \\ \hline \hline
+1 & 1 & 0 &  \\ 
+2 & 1 & 0 & \\ 
+3 & 0 & 0 & \\ 
+4 & 1 & 1 & \\ 
+5 & 0 & 1 & \\ 
+\ldots & \ldots & \ldots & 
+\end{tabular}
+
+\caption{Positioned n-grams with a label.}
+\end{table}
+
+\end{frame}
+
+
+\begin{frame}
+
+\begin{table}
+\begin{tabular}{c || c c }
+  & target    & feature   &  \\ \hline \hline
+0 & $n_{1,1}$ & $n_{1,0}$ &  \\ 
+1 & $n_{0,1}$ & $n_{0,0}$ & 
+\end{tabular}
+
+\caption{Contingency table.}
+\end{table}
+
+\end{frame}
+
+\begin{frame}
+
+Test statistics used by QuiPT (information gain, Kullback-Leibler divergence) measure inbalance of contingency tables.
+
+\end{frame}
+
+\subsection{Multinomial distribution of target-feature relationship}
+
+\begin{frame}
+If probability that target equals 1 is $p$ and probability that feature equals
+1 is $q$ and feature and target are independent then each of them has the 
+following probabilities 
+$$P(Target, Feature) = (1,1)) = p \cdot q$$
+$$P(Target, Feature) = (1,0)) = p \cdot (1-q)$$
+$$P(Target, Feature) = (0,1)) = (1-p) \cdot q$$
+$$P(Target, Feature) = (0,0)) = (1-p) \cdot (1-q)$$
+\end{frame}
+
+\begin{frame}
+
+\begin{equation*}
+\begin{split}
+F(n_{1,1}, n_{1,0}, n_{0,1}, n_{0,0}) = {n \choose n_{1,1}} (p\cdot q)^{n_{1,1}} {n - n_{1,1} \choose n_{1,0}} (p\cdot (1-q))^{n_{1,0}} \\
+{n - n_{1,1} - n_{1,0} \choose n_{0,1}} ((1-p)\cdot q)^{n_{0,1}} \\
+{n - n_{1,1} - n_{1,0} -n_{0,1}\choose n_{0,0}} ((1-p)\cdot (1-q))^{n_{0,0}}$$
+\end{split}
+\end{equation}
+
+In addition to this: 
+$n_{1,\cdot} = n_{1,1} + n_{1,0}$ and
+$n_{\cdot, 1} = n_{1,1} + n_{0,1}$ are known and fixed.
+
+\end{frame}
+
+\begin{frame}
+\begin{itemize}
+\item<1-> $n_{1,1}$ is from range $[0,min(n_{\cdot, 1}, n_{1, \cdot})]$.
+\item<2-> The probability of certain contingency table is given as the conditional distribution, as impose restrictions on two parameters $n_{\cdot, 1} $ and $n_{1, \cdot}$.
+\item<3-> The test statistic is computed for each possible value of $n_{1,1}$.
+\item<4-> The distribution of test statistics under hypothesis that target and feature
+are independant is computed using values from 3. 
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}
+
+\begin{columns}[c] 
+    \column{.7\textwidth} 
+    \scalebox{0.95}{
+<<echo = FALSE,message=FALSE,fig.align='center'>>=
+target_feature <- create_feature_target(50, 50, 50, 50)
+tmp <- criterion_distribution(target = target_feature[,1], feature = target_feature[,2],
+                       graphical_output = TRUE)
+@
+}
+\column{.5\textwidth}
+<<echo = FALSE,message=FALSE,results='asis'>>=
+tab <- data.frame(table(target_feature[, 1], target_feature[, 2]))
+colnames(tab) <- c("Target", "Feature", "Freq")
+xtable(tab)
+@
+    \end{columns}
+\end{frame}
+
+
+\subsection{Advantages over permutation test}
+
+\begin{frame}
+\begin{itemize}
+\item<1-> QuiPT is faster.
+\item<2-> Using the exact distribution of possible values of the criterion QuiPT yields precise small p-values without increasing the computation time.  
+\end{itemize}
+\end{frame}
+
+
+\section{Simulation scheme}
+
+\begin{frame}
+\begin{enumerate}
+\item<1-> Random 4000 sequences (20 nucleotides each). The half of the sequences has label 0.
+\item<2-> Choose a single position between 3 and 18 (to avoid border cases).
+\item<3-> Resample nucleotides at chosen position. The dominant nucletoide has probabilitiy of occurence $p_d = 0.25$. Other nucleotides have probability of occurence $p_o = (1 - p_d)/3  $. 
+\item<4-> Perform QuiPT (Information Gain) and choose significant features (with p-value $< 0.001$).
+\item<5-> Iterate steps 1-4 over other values of $p_d$ - 0.38, 0.51, 0.65, 0.78, 0.91.
+\item<6-> Repeat steps 1-5 200 times.
+\end{enumerate}
+\end{frame}
+
+
+\subsection{Power of the test}
+
+
+
+\begin{frame}
+\centering
+\scalebox{0.75}{  
+<<echo = FALSE,message=FALSE,fig.align='center'>>=
+load("three_n_power.RData")
+
+three_n_power <- three_n_power[sapply(three_n_power, function(i) i[[6]][[3]][2]) > 150]
+
+power <- Reduce("+", lapply(three_n_power, function(single_rep) {
+  #single replication dat
+  sr_dat <- do.call(rbind, lapply(single_rep, unlist))
+  sr_dat[, c(1, 3, 5)]/matrix(rep(c(4, 32, 192), 6), nrow = 6, byrow = TRUE)
+}))/length(three_n_power)
+
+ggplot(tfres(power), aes(x = ngram, y = value, fill = sig)) + 
+  geom_bar(stat = "identity", position = "dodge") +
+  scale_y_continuous("Important features found (%)") +
+  scale_x_discrete("n-gram") +
+  scale_fill_discrete("Signal strength") +
+  pres_theme
+@
+}
+\end{frame}
+
+
+\subsection{False significant features}
+
+
+
+\begin{frame}
+\centering
+\scalebox{0.75}{  
+<<echo = FALSE,message=FALSE,fig.align='center'>>=
+mean_nonan <- function(x)
+  sum(x[!is.nan(x)])/sum(!is.nan(x))
+
+fs_dat <- sapply(three_n_power, function(single_rep) {
+  #single replication dat
+  sr_dat <- do.call(rbind, lapply(single_rep, unlist))
+  (sr_dat[, c(2, 4, 6)] - sr_dat[, c(1, 3, 5)])/sr_dat[, c(2, 4, 6)]
+})
+
+fs_mean <- matrix(apply(fs_dat, 1, mean_nonan), nrow = 6)
+
+#no significant features at all
+no_sig <- matrix(apply(fs_dat, 1, function(i)
+  sum(is.nan(i))), nrow = 6)
+
+fs <- data.frame(tfres(fs_mean), 
+                 no_sig = (length(three_n_power) - tfres(no_sig)[["value"]])/length(three_n_power))
+
+ggplot(fs, aes(x = ngram, y = sig, fill = no_sig)) + 
+  geom_tile() +
+  scale_fill_continuous(name = "No significant features", 
+                        low = "#0072B2", high =  "#D55E00") +
+  geom_point(aes(x = ngram, y = sig, size = value), range = c(5, 12)) +
+  scale_size_continuous("False significant \nfeature frequency") +
+  scale_fill_continuous("Significant feature \n frequency") +
+  pres_theme
+
+@
+}
+\end{frame}
+
+
+\section{Conclusion}
+
+\subsection{Advantages over permutation test}
+
+\begin{frame}
+Quick permutation test is a powerful and quick equivalent of permutation test in binary feature-binary target testing scenario.
+\end{frame}
+
+\end{document}

@@ -11,7 +11,7 @@ three_n_power <- pblapply(1L:200, function(dummy_variable) {
   seqs <- matrix(sample(1L:4, 20*4000, replace = TRUE), nrow = 4000)
   storage.mode(seqs) <- "integer"
   #2L:19 to eliminate border cases
-  chosen_nuc <- sample(2L:19, 1)
+  chosen_nuc <- sample(3L:18, 1)
   lapply(seq(from = 0.25, to = 0.91, length.out = 6), function(prop_signif) {  
     #change random nucleotide for positive cases to favor one 
     #nucleotide
@@ -37,5 +37,5 @@ three_n_power <- pblapply(1L:200, function(dummy_variable) {
 })
 
 #don't overwrite simulations
-#save(three_n_power, file = "three_n_power.RData")
+save(three_n_power, file = "three_n_power.RData")
 

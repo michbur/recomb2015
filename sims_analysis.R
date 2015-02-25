@@ -24,6 +24,19 @@ power <- Reduce("+", lapply(three_n_power, function(single_rep) {
   sr_dat[, c(1, 3, 5)]/matrix(rep(c(4, 32, 192), 6), nrow = 6, byrow = TRUE)
 }))/length(three_n_power)
 
+
+#do 1-grams have bigger power
+ggplot(tfres(power), aes(x = sig, y = ngram, fill = value)) + geom_tile()
+
+
+ggplot(tfres(power), aes(x = ngram, y = value, fill = sig)) + 
+  geom_bar(stat = "identity", position = "dodge") +
+  scale_y_continuous("Important features found (%)") +
+  scale_x_discrete("n-gram") +
+  scale_fill_discrete("n-gram")
+
+
+
 #false significant
 #mean which ignores NaNs
 mean_nonan <- function(x)
@@ -34,15 +47,18 @@ fs_dat <- sapply(three_n_power, function(single_rep) {
   sr_dat <- do.call(rbind, lapply(single_rep, unlist))
   (sr_dat[, c(2, 4, 6)] - sr_dat[, c(1, 3, 5)])/sr_dat[, c(2, 4, 6)]
 })
-  
+
 fs_mean <- matrix(apply(fs_dat, 1, mean_nonan), nrow = 6)
 
 #no significant features at all
-matrix(apply(fs_dat, 1, function(i)
+no_sig <- matrix(apply(fs_dat, 1, function(i)
   sum(is.nan(i))), nrow = 6)
 
-#do 1-grams have bigger power
-ggplot(tfres(power), aes(x = sig, y = ngram, fill = value)) + geom_tile()
+fs <- data.frame(tfres(fs_mean), no_sig = tfres(no_sig)[["value"]])
 
-
-ggplot(tfres(fs_mean), aes(x = sig, y = ngram, fill = value)) + geom_tile()
+ggplot(fs, aes(x = ngram, y = sig, fill = no_sig)) + 
+  geom_tile() +
+  scale_fill_continuous(name = "No significant features", 
+                        low = "#0072B2", high =  "#D55E00") +
+  geom_point(aes(x = ngram, y = sig, size = value), range = c(5, 12)) +
+  scale_size_continuous("No significant features")
