@@ -109,7 +109,7 @@ print(xtable(unis, caption = "Unigrams.", digits = 0), include.rownames = FALSE)
 <<echo = FALSE,message=FALSE,results='asis'>>=
 unis <- count_ngrams(sample_seq, 1, 1L:4, pos = TRUE)
 unis <- data.frame(as.matrix(unis))[, 1L:7]
-print(xtable(unis, caption = "Part of possible unigrams with position information.", digits = 0), include.rownames = FALSE)
+print(xtable(unis, caption = "A fraction of possible unigrams with position information.", digits = 0), include.rownames = FALSE)
 @
 
 Positioned n-gram data is binary.
@@ -149,6 +149,8 @@ ggplot(dat, aes(x = n, y = n_max, fill = L, col = L)) +
 
 \section{Permutation test}
 
+\subsection{Testing framework}
+
 \begin{frame}
 \begin{enumerate}
 \item<1-> Calculate test statistic for the given positioned n-gram and etiquettes ($T_R$).
@@ -175,13 +177,14 @@ $N_{T_P > T_R}$ is number of times when $T_P$ was bigger than $T_R$
 \begin{itemize}
 \item<1-> Computationally expensive (number of cases, number of features).
 \item<2-> Single feature analysis (no feature interaction).  
+\item<3-> Unfeasible precise estimation of low p-values.  
 \end{itemize}
 \end{frame}
 
 \subsection{p-value resolution}
 
 \begin{frame}
-The number of permutations is inversely proportional to the resolution of p-value.
+The number of permutations is inversely proportional to the interval between p-values.
 
 \smallskip
 
@@ -393,8 +396,6 @@ ggplot(fs, aes(x = ngram, y = sig, fill = no_sig)) +
 
 
 \section{Conclusion}
-
-\subsection{Advantages over permutation test}
 
 \begin{frame}
 Quick permutation test is a powerful and quick equivalent of permutation test in binary feature-binary target testing scenario.
