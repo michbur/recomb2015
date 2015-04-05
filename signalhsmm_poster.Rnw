@@ -5,7 +5,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage{amsfonts}
 \usepackage{amsmath}
-\usepackage[notocbib]{apacite}
+\usepackage{natbib}
 \usepackage{graphicx}
 \usepackage{array,booktabs,tabularx}
 \newcolumntype{Z}{>{\centering\arraybackslash}X}
@@ -69,19 +69,20 @@ library(reshape2)
 
 
 \date{}
-\author{Michał  Burdukiewicz\inst{1}, Piotr Sobczyk\inst{2}, Paweł  Błażej\inst{1}, \\ Paweł Mackiewicz\inst{1}}
+\author{Micha\l{}�  Burdukiewicz\inst{1}*, Piotr Sobczyk\inst{2}, Pawe\l{}�  B\l{}a\.{z}ej\inst{1}, Pawe\l{}� Mackiewicz\inst{1} \\
+*michalburdukiewicz@gmail.com}
 % \institute{\begin{tabular}[h]{c@{\hskip 4cm}c}
 %       \textsuperscript{1}Department of Genomics & \textsuperscript{2}Institute of Mathematics and Computer Science \\
 %       University of Wrocław & Wrocław University of Technology
 %   \end{tabular}  
 % }
 
-\institute{\textsuperscript{1}University of Wrocław, Department of Genomics, Poland 
+\institute{\textsuperscript{1}University of Wroc\l{}aw, Department of Genomics, Poland 
 
 \vspace{0.5cm}
 
-\textsuperscript{2}Wrocław University of Technology, Institute of Mathematics and Computer Science, Poland}
-\title{\huge Signal peptide prediction using hidden Markov models}
+\textsuperscript{2}Wroc\l{}aw University of Technology, Institute of Mathematics and Computer Science, Poland}
+\title{\huge Predicting eukaryotic signal peptides using hidden Markov models}
 
 \begin{frame}
   \begin{columns}
@@ -95,7 +96,7 @@ library(reshape2)
         \begin{itemize}
           \item are short (20-30 residues) N-terminal amino acid sequences,
             \item direct a protein to the endomembrane system and next to the extracellular localization,
-            \item possess three distinct domains with variable length and characteristic amino acid composition~\cite{hegde_surprising_2006}.
+            \item possess three distinct domains with variable length and characteristic amino acid composition~\citep{hegde_surprising_2006}.
         \end{itemize}
         \vspace{1cm}
       Proteins with secretory signal peptides are:
@@ -118,9 +119,9 @@ library(reshape2)
       \end{figure}
 
       \begin{itemize}
-        \item n-region: mostly basic residues~\cite{nielsen_prediction_1998},
-        \item h-region: strongly hydrophobic residues~\cite{nielsen_prediction_1998},
-        \item c-region: a few polar, uncharged residues~\cite{jain_signal_1994}.
+        \item n-region: mostly basic residues~\citep{nielsen_prediction_1998},
+        \item h-region: strongly hydrophobic residues~\citep{nielsen_prediction_1998},
+        \item c-region: a few polar, uncharged residues~\citep{jain_signal_1994}.
       \end{itemize}
     \end{block}
     \vfill
@@ -292,7 +293,7 @@ print(tabAminokwasow(aa5, c("Positively charged", "Nonpolar and aliphatic",
      
      
     \begin{block}{Bibliography}
-      \bibliographystyle{apacite2}
+      \bibliographystyle{apalike}
       \bibliography{document}
     \end{block}
     \vfill
