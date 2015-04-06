@@ -71,11 +71,7 @@ library(reshape2)
 \date{}
 \author{Micha\l{}Ç  Burdukiewicz\inst{1}*, Piotr Sobczyk\inst{2}, Pawe\l{}Ç  B\l{}a\.{z}ej\inst{1}, Pawe\l{}Ç Mackiewicz\inst{1} \\
 *michalburdukiewicz@gmail.com}
-% \institute{\begin{tabular}[h]{c@{\hskip 4cm}c}
-%       \textsuperscript{1}Department of Genomics & \textsuperscript{2}Institute of Mathematics and Computer Science \\
-%       University of Wroc≈Çaw & Wroc≈Çaw University of Technology
-%   \end{tabular}  
-% }
+
 
 \institute{\textsuperscript{1}University of Wroc\l{}aw, Department of Genomics, Poland 
 
@@ -86,26 +82,27 @@ library(reshape2)
 
 \begin{frame}
   \begin{columns}
-    \begin{column}{.44\textwidth}
+    \begin{column}{.48\textwidth}
       \begin{beamercolorbox}[center,wd=\textwidth]{postercolumn}
         \begin{minipage}[T]{.95\textwidth}
           \parbox[t][\columnheight]{\textwidth}
             {
+    
+    \begin{block}{Goal of the project}
+      Develop an accurate method of predicting presence of signal peptides.
+    \end{block}
+    \vfill
+    
+            
     \begin{block}{Introduction}
       Secretory signal peptides:
         \begin{itemize}
           \item are short (20-30 residues) N-terminal amino acid sequences,
             \item direct a protein to the endomembrane system and next to the extracellular localization,
             \item possess three distinct domains with variable length and characteristic amino acid composition~\citep{hegde_surprising_2006}.
+            \item are universal enough to direct properly proteins in different secretory systems - artifically introduced bacterial signal peptides can guide proteins in mammals~\citep{nagano_2014} and plants~\citep{moeller_2009},
+            \item tag among others hormons, immune system proteins, structural proteins, and metabolic enzymes.
         \end{itemize}
-        \vspace{1cm}
-      Proteins with secretory signal peptides are:
-        \begin{itemize}
-          \item hormons (e.g., prolactin, glucagon),
-          \item immune system proteins (e.g., interferons, interleukins),
-          \item structural proteins (e.g., collagen),
-          \item metabolic enzymes (e.g., alpha-galactosidase, pepsins).
-        \end{itemize}         
     \end{block}
     
     \vfill
@@ -113,7 +110,7 @@ library(reshape2)
     \begin{block}{Organization of signal peptide}
       \begin{figure}[ht]
         \centering
-        \scalebox{1.4}{
+        \scalebox{1.35}{
           \includegraphics{SP.png}
         }
       \end{figure}
@@ -127,10 +124,10 @@ library(reshape2)
     \vfill
     
     
-    \begin{block}{Hidden semi-Markov model  (HSMM)}
-      Hidden semi-Markov model of a secretory signal peptide assumes that:
+    \begin{block}{Hidden semi-Markov model (HSMM) of a signal peptide}
+      Assumptions of the model:
       \begin{itemize}
-        \item the observable distribution of amino acids is a result of being in a certain region (state),
+        \item the observable distribution of amino acids arises due to being in a certain region (state),
         \item a duration of the state (the length of given region) is modeled by a probability distribution (other than geometric distribution as in typical hidden Markov models).
       \end{itemize}
     \end{block}
@@ -140,7 +137,7 @@ library(reshape2)
       \begin{enumerate}[1.]
         \item Removal of atypical or poorly annotated records from data set of proteins with signal peptide from UniProt database,
         \item determination of n-, h-, c-regions by the heuristic algorithm,
-        \item reduction of dimensionality by aggregating of amino acids to several physicochemical groups,
+        \item reduction of dimensionality by aggregating amino acids to several physicochemical groups,
         \item calculation of the amino acid group frequency in each region and the average length of the region,
         \item training of two HSMM models for proteins with and without signal peptide.
       \end{enumerate} 
@@ -167,7 +164,7 @@ print(tabAminokwasow(aa5, c("Positively charged", "Nonpolar and aliphatic",
     \vfill
     
     \begin{block}{Signal peptide prediction}
-    During the test phase, each protein was fitted to two HSMMs. The outcome consists of   probabilities that a particular residue belongs to a given model and predicted cleavage site.    
+    During the test phase, each protein is fitted to two HSMMs representing respectively proteins with and without signal peptides. The probabilities of both fits and predicted cleavage site constitute the software output.    
     \begin{figure}
     \centering
     \resizebox{32.5cm}{!}{%
@@ -203,7 +200,7 @@ print(tabAminokwasow(aa5, c("Positively charged", "Nonpolar and aliphatic",
     
 %new column ------------------------------------------------------    
     
-    \begin{column}{.53\textwidth}
+    \begin{column}{.52\textwidth}
       \begin{beamercolorbox}[center,wd=\textwidth]{postercolumn}
         \begin{minipage}[T]{.95\textwidth}  
           \parbox[t][\columnheight]{\textwidth}
@@ -293,8 +290,10 @@ print(tabAminokwasow(aa5, c("Positively charged", "Nonpolar and aliphatic",
      
      
     \begin{block}{Bibliography}
+    \tiny{
       \bibliographystyle{apalike}
       \bibliography{document}
+    }
     \end{block}
     \vfill
             }
