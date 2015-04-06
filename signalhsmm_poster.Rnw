@@ -65,6 +65,21 @@
 library(xtable)
 library(ggplot2)
 library(reshape2)
+load("poster_data.RData")
+
+poster_theme <- theme(plot.background=element_rect(fill = "transparent",
+                                                   colour = "transparent"),
+                      axis.text.x = element_text(size=16), 
+                      axis.text.y = element_text(size=16),
+                      axis.title.x = element_text(size=19, vjust = -1), 
+                      axis.title.y = element_text(size=19, vjust = 1),
+                      strip.text = element_text(size=19),
+                      legend.text = element_text(size=16), 
+                      legend.title = element_text(size=19),
+                      plot.title = element_text(size=27),
+                      panel.background = element_rect(fill = "transparent",colour = "black"),
+                      legend.direction="horizontal", legend.position = "bottom",
+                      legend.background = element_rect(fill="NA"))
 @
 
 
@@ -82,14 +97,14 @@ library(reshape2)
 
 \begin{frame}
   \begin{columns}
-    \begin{column}{.48\textwidth}
+    \begin{column}{.49\textwidth}
       \begin{beamercolorbox}[center,wd=\textwidth]{postercolumn}
         \begin{minipage}[T]{.95\textwidth}
           \parbox[t][\columnheight]{\textwidth}
             {
     
     \begin{block}{Goal of the project}
-      Develop an accurate method of predicting presence of signal peptides.
+      Develop an accurate method of predicting signal peptide presence.
     \end{block}
     \vfill
     
@@ -135,7 +150,7 @@ library(reshape2)
     
     \begin{block}{Training  of the algorithm}
       \begin{enumerate}[1.]
-        \item Removal of atypical or poorly annotated records from data set of proteins with signal peptide from UniProt database,
+        \item Removal of atypical (non-standard amino acids, more than one cleavage site) or poorly annotated records from data set of proteins with signal peptide from UniProt database,
         \item determination of n-, h-, c-regions by the heuristic algorithm,
         \item reduction of dimensionality by aggregating amino acids to several physicochemical groups,
         \item calculation of the amino acid group frequency in each region and the average length of the region,
@@ -207,38 +222,59 @@ print(tabAminokwasow(aa5, c("Positively charged", "Nonpolar and aliphatic",
             {
             
        
-    \begin{block}{Evaluation}
-    A validated data set contained 3816 eukaryotic proteins with experimentally confirmed signal peptides and 9795 eukaryotic proteins without signal peptides.
+    \begin{block}{Data set}
+    3816 eukaryotic proteins with experimentally confirmed signal peptides and 9795 eukaryotic proteins without signal peptides downloaded from UniProt database release 2014\_07.
     
-    \vspace{0.5cm}
-    
-    Proteins with more than one cleavage site were removed from the data set.
     \end{block}
     \vfill    
     
     \begin{block}{Validation procedure}
     \begin{enumerate}[1.]
-      \item Chose randomly (without replacement) 1200 proteins with signal peptides and train the algorithm (called signal.hsmm).
-      \item Chose randomly (without replacement) 120 proteins with signal peptides and 120 proteins without signal peptide and test it with a newly trained signal.hsmm. Calculate performance measures.
-      \item Repeat step 1. and 2. 1000 times.
+      \item Chose randomly (without replacement) 3816 proteins without signal peptides and train the algorithm (called signal.hsmm) and reshuffle 3816 proteins with signal peptides.
+      \item Perform 5-fold cross-validation.
+      \item Repeat step 1. and 2. 250 times.
     \end{enumerate} 
     \end{block}
     \vfill
     
-    \begin{block}{Results of validation}
-%     \begin{figure}
-%     \scalebox{0.92}{    
-% <<echo = FALSE,message=FALSE,fig.width=10,fig.align='center'>>=
-% melt_1000 <- melt(thousand_reps_measur[, c("AUC", "H", "MCC", "Sens", "Spec", "Precision", "Recall", "TPR")])
-% levels(melt_1000[[1]]) <- c("AUC", "H-measure", "MCC", "Sensitivity", "Specificity", "Precision", "Recall", "TPR")
-% ggplot(melt_1000, aes(x = variable, y = value)) + geom_boxplot() +
-%   scale_x_discrete(name = "Performance measure") + scale_y_continuous(name = "Value") +
-%   theme(plot.background=element_rect(fill = "transparent",colour = "transparent"),
-%         axis.text.x = element_text(size=16), axis.text.y = element_text(size=16),
-%         axis.title.x = element_text(size=19), axis.title.x = element_text(size=19))
-% @
-%     }
-%     \end{figure}
+    \begin{block}{Performance measures}
+    \begin{figure}
+    \scalebox{0.88}{    
+<<echo = FALSE,message=FALSE,fig.width=14,fig.align='center'>>=
+metrics <- t(poster_data[["metrics"]][c("AUC", "H", "Gini", "Sens", "Spec", "Precision"), ])
+melted_metrics <- do.call(rbind, lapply(1L:ncol(metrics), function(i)
+       data.frame(metric = rep(colnames(metrics)[i], nrow(metrics)),
+                  value = unlist(metrics[, i]))))
+melted_metrics[["metric"]] <- as.factor(melted_metrics[["metric"]])
+levels(melted_metrics[["metric"]]) <- c("AUC", "H-measure", "Gini", "Sensitivity", "Specificity", "Precision")
+ggplot(melted_metrics, aes(x = metric, y = value)) + 
+  geom_boxplot() +
+  scale_x_discrete(name = "Performance measure") + 
+  scale_y_continuous(name = "Value") +
+  poster_theme
+@
+    }
+    \end{figure}
+    \end{block}
+    \vfill
+    
+    
+    \begin{block}{Cleavage site prediction}
+    \begin{figure}
+    \scalebox{0.88}{    
+<<echo = FALSE,message=FALSE,fig.width=14,fig.align='center'>>=
+position_data <- poster_data[["position_table"]]
+position_data[["Freq"]] <- position_data[["Freq"]]/sum(position_data[["Freq"]])
+ggplot(position_data, aes(x = Var1, y = Freq)) + 
+  geom_bar(stat = "identity") + 
+  scale_y_continuous(name = "Proportion of predicted cleavage sites") +
+  scale_x_discrete("Absolute range from the real cleavage site") +
+  poster_theme
+
+
+@
+    }
+    \end{figure}
     \end{block}
     \vfill
     
