@@ -220,17 +220,26 @@ $$P(Target, Feature) = (1,0)) = p \cdot (1-q)$$
 $$P(Target, Feature) = (0,1)) = (1-p) \cdot q$$
 $$P(Target, Feature) = (0,0)) = (1-p) \cdot (1-q)$$
 
+So, this shows that what we actually get is a contingency table that needs to 
+tested for independance.
+
 \begin{equation*}
 \begin{split}
-F(n_{1,1}, n_{1,0}, n_{0,1}, n_{0,0}) = {n \choose n_{1,1}} (p\cdot q)^{n_{1,1}} {n - n_{1,1} \\ \choose n_{1,0}} (p\cdot (1-q))^{n_{1,0}} \\
-{n - n_{1,1} - n_{1,0} \\ \choose n_{0,1}} ((1-p)\cdot q)^{n_{0,1}} \\
-{n - n_{1,1} - n_{1,0} -n_{0,1}\choose n_{0,0}} \\((1-p)\cdot (1-q))^{n_{0,0}}$$
+F(n_{1,1}, n_{1,0}, n_{0,1}, n_{0,0}) = \\ 
+{n \choose n_{1,1}} (p\cdot q)^{n_{1,1}} 
+{ n - n_{1,1} \choose n_{1,0}} (p\cdot (1-q))^{n_{1,0}} \\
+{n - n_{1,1} - n_{1,0} \choose n_{0,1}} ((1-p)\cdot q)^{n_{0,1}} \\
+{n - n_{1,1} - n_{1,0} -n_{0,1} \choose n_{0,0}} ((1-p)\cdot (1-q))^{n_{0,0}}$$
 \end{split}
 \end{equation}
 
-In addition to this: 
+Our data gives constraints:
 $n_{1,\cdot} = n_{1,1} + n_{1,0}$ and
-$n_{\cdot, 1} = n_{1,1} + n_{0,1}$ are known and fixed.
+$n_{\cdot, 1} = n_{1,1} + n_{0,1}$.
+Thus, conditioning on $n_{1,1}$ we get hypergeometric distribution.
+
+This is in fact exact two-sided Fisher's test. Information Gain is used here 
+as a way of deciding which contingency tables are more extreme.
     \end{block}
     \vfill
     
@@ -256,30 +265,55 @@ $n_{\cdot, 1} = n_{1,1} + n_{0,1}$ are known and fixed.
     
     \begin{columns}
     \centering
-    \column{.6\textwidth} 
+    \column{.5\textwidth} 
     \scalebox{0.95}{
 <<echo = FALSE,message=FALSE,fig.align='center'>>=
 target_feature <- create_feature_target(40, 10, 25, 40)
 tmp <- distr_crit(target = target_feature[,1], feature = target_feature[,2])
-plot(tmp)
+biogram:::ggplot2.criterion_distribution(tmp)
 @
 }
 \column{.5\textwidth}
 <<echo = FALSE,message=FALSE,results='asis'>>=
 tab <- data.frame(table(target_feature[, 1], target_feature[, 2]))
 colnames(tab) <- c("Target", "Feature", "Freq")
-xtable(tab)
+xtable(tab, align = c("|c|ccc|"), )
 @
     \end{columns}
     
     \end{block}
     \vfill
     
-    \begin{block}{Test power}
-    \centering
-\scalebox{0.95}{  
-<<echo = FALSE,message=FALSE,fig.align='center'>>=
+%     \begin{block}{Test power}
+%     \centering
+% \scalebox{0.95}{  
+% <<echo = FALSE,message=FALSE,eval=FALSE,fig.align='center'>>=
+% 
+% three_n_power <- three_n_power[sapply(three_n_power, function(i) i[[6]][[3]][2]) > 150]
+% 
+% power <- Reduce("+", lapply(three_n_power, function(single_rep) {
+%   #single replication dat
+%   sr_dat <- do.call(rbind, lapply(single_rep, unlist))
+%   sr_dat[, c(1, 3, 5)]/matrix(rep(c(4, 32, 192), 6), nrow = 6, byrow = TRUE)
+% }))/length(three_n_power)
+% 
+% ggplot(tfres(power), aes(x = ngram, y = value, fill = sig)) + 
+%   geom_bar(stat = "identity", position = "dodge") +
+%   scale_y_continuous("Important features found (%)") +
+%   scale_x_discrete("n-gram") +
+%   scale_fill_discrete("Signal strength") +
+%   poster_theme
+% 
+% 
+% @
+% }
+% \end{block}
+%     \vfill
 
+\begin{block}{Power and False discoveries}
+    \centering
+\scalebox{1}{  
+<<echo = FALSE,message=FALSE,fig.align='center', fig.width=15>>=
 three_n_power <- three_n_power[sapply(three_n_power, function(i) i[[6]][[3]][2]) > 150]
 
 power <- Reduce("+", lapply(three_n_power, function(single_rep) {
@@ -287,24 +321,6 @@ power <- Reduce("+", lapply(three_n_power, function(single_rep) {
   sr_dat <- do.call(rbind, lapply(single_rep, unlist))
   sr_dat[, c(1, 3, 5)]/matrix(rep(c(4, 32, 192), 6), nrow = 6, byrow = TRUE)
 }))/length(three_n_power)
-
-ggplot(tfres(power), aes(x = ngram, y = value, fill = sig)) + 
-  geom_bar(stat = "identity", position = "dodge") +
-  scale_y_continuous("Important features found (%)") +
-  scale_x_discrete("n-gram") +
-  scale_fill_discrete("Signal strength") +
-  poster_theme
-
-
-@
-}
-\end{block}
-    \vfill
-
-\begin{block}{False discoveries}
-    \centering
-\scalebox{0.95}{  
-<<echo = FALSE,message=FALSE,fig.align='center'>>=
 
 mean_nonan <- function(x) {
   sum(x[!is.nan(x)])/sum(!is.nan(x))
@@ -336,7 +352,7 @@ p <- ggplot(fs, aes(x = ngram, y = sig, fill = power)) +
   scale_size_continuous("False significant \nfeature frequency") +
   ylab("Signal strengh") + xlab("N-gram size") +
   poster_theme
-p +   geom_abline(intercept=1.5, slope=0.0, color="#666666", size=5)
+p +   geom_abline(intercept=1.5, slope=0.0, color="#666666", size=5) 
 
 
 @
