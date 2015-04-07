@@ -1,0 +1,397 @@
+\documentclass[final]{beamer}\usepackage[]{graphicx}\usepackage[]{color}
+%% maxwidth is the original width if it is less than linewidth
+%% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
+\newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
+\newcommand{\hlstr}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
+\newcommand{\hlcom}[1]{\textcolor[rgb]{0.678,0.584,0.686}{\textit{#1}}}%
+\newcommand{\hlopt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlstd}[1]{\textcolor[rgb]{0.345,0.345,0.345}{#1}}%
+\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.161,0.373,0.58}{\textbf{#1}}}%
+\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
+\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
+\newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
+
+\usepackage{framed}
+\makeatletter
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
+\makeatother
+
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\usepackage{alltt}
+\usepackage{grffile}
+\mode<presentation>{\usetheme{CambridgeUSPOL}}
+
+\usepackage[utf8]{inputenc}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{natbib}
+\usepackage{graphicx}
+\usepackage{array,booktabs,tabularx}
+\newcolumntype{Z}{>{\centering\arraybackslash}X}
+
+% rysunki
+\usepackage{tikz}
+\usepackage{ifthen}
+\usepackage{xxcolor}
+\usetikzlibrary{arrows}
+\usetikzlibrary[topaths]
+\usetikzlibrary{decorations.pathreplacing}
+%\usepackage{times}\usefonttheme{professionalfonts}  % times is obsolete
+\usefonttheme[onlymath]{serif}
+\boldmath
+\usepackage[orientation=portrait,size=a0,scale=1.4,debug]{beamerposter}                       % e.g. for DIN-A0 poster
+%\usepackage[orientation=portrait,size=a1,scale=1.4,grid,debug]{beamerposter}                  % e.g. for DIN-A1 poster, with optional grid and debug output
+%\usepackage[size=custom,width=200,height=120,scale=2,debug]{beamerposter}                     % e.g. for custom size poster
+%\usepackage[orientation=portrait,size=a0,scale=1.0,printer=rwth-glossy-uv.df]{beamerposter}   % e.g. for DIN-A0 poster with rwth-glossy-uv printer check
+% ...
+%
+
+\usecolortheme{seagull}
+\useinnertheme{rectangles}
+\setbeamercolor{item projected}{bg=darkred}
+% \setbeamertemplate{enumerate items}[default]
+\setbeamertemplate{caption}{\insertcaption} 
+\setbeamertemplate{navigation symbols}{}
+\setbeamercovered{transparent}
+\setbeamercolor{block title}{fg=darkred}
+\setbeamercolor{local structure}{fg=darkred}
+
+\setbeamercolor*{enumerate item}{fg=darkred}
+\setbeamercolor*{enumerate subitem}{fg=darkred}
+\setbeamercolor*{enumerate subsubitem}{fg=darkred}
+
+\setbeamercolor*{itemize item}{fg=darkred}
+\setbeamercolor*{itemize subitem}{fg=darkred}
+\setbeamercolor*{itemize subsubitem}{fg=darkred}
+
+\newlength{\columnheight}
+\setlength{\columnheight}{90cm}
+\renewcommand{\thetable}{}
+\def\andname{,}
+\authornote{}
+
+\renewcommand{\APACrefatitle}[2]{}
+\renewcommand{\bibliographytypesize}{\footnotesize} 
+\renewcommand{\APACrefYearMonthDay}[3]{%
+  {\BBOP}{#1}
+  {\BBCP}
+}
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\begin{document}
+
+
+
+
+
+
+\date{}
+\author{Piotr Sobczyk\inst{1}*, Micha\l{}  Burdukiewicz\inst{2}, Chris Lauber\inst{3}, Pawe\l{} Mackiewicz\inst{2} \\
+*Piotr.Sobczyk@pwr.edu.pl}
+
+
+\institute{
+
+\textsuperscript{1}Wroc\l{}aw University of Technology, Institute of Mathematics and Computer Science, Poland
+
+\vspace{0.3cm}
+
+\textsuperscript{2}University of Wroc\l{}aw, Department of Genomics, Poland 
+
+\vspace{0.3cm}
+
+\textsuperscript{3}Dresden University of Technology, Institute of Medical Informatics and Biometry, Poland 
+
+}
+\title{\huge Quick Permutation Test: feature filtering of n-gram data}
+
+\begin{frame}
+  \begin{columns}
+    \begin{column}{.49\textwidth}
+      \begin{beamercolorbox}[center,wd=\textwidth]{postercolumn}
+        \begin{minipage}[T]{.95\textwidth}
+          \parbox[t][\columnheight]{\textwidth}
+            {
+    
+        
+    \begin{block}{Introduction}
+      N-grams (k-tuples) are vectors of n characters derived from input sequence(s). They may form continuous sub-sequences or be discontinuous. Another important n-gram parameter is its position. Instead of just counting n-grams, one may want to count how many n-grams occur at a given position in multiple (e.g. related) sequences.
+
+\small{
+       \begin{columns}[c] % the "c" option specifies center vertical alignment
+    \column{.5\textwidth} 
+% latex table generated in R 3.1.3 by xtable 1.7-4 package
+% Tue Apr  7 12:30:44 2015
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrrrrr}
+  \hline
+ & P1 & P2 & P3 & P4 & P5 & P6 \\ 
+  \hline
+S1 & 4 & 3 & 1 & 3 & 1 & 3 \\ 
+  S2 & 2 & 3 & 1 & 1 & 4 & 4 \\ 
+  S3 & 4 & 3 & 1 & 3 & 4 & 4 \\ 
+   \hline
+\end{tabular}
+\caption{Sample sequences.} 
+\end{table}
+
+      
+      
+     % column designated by a command
+
+    \column{.5\textwidth}
+    
+% latex table generated in R 3.1.3 by xtable 1.7-4 package
+% Tue Apr  7 12:30:44 2015
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrr}
+  \hline
+1 & 2 & 3 & 4 \\ 
+  \hline
+2 & 0 & 3 & 1 \\ 
+  2 & 1 & 1 & 2 \\ 
+  1 & 0 & 2 & 3 \\ 
+   \hline
+\end{tabular}
+\caption{Unigram counts.} 
+\end{table}
+
+
+    \end{columns}
+
+% latex table generated in R 3.1.3 by xtable 1.7-4 package
+% Tue Apr  7 12:30:44 2015
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrrrrrrrrr}
+  \hline
+P1\_1 & P2\_1 & P3\_1 & P4\_1 & P5\_1 & P6\_1 & P1\_2 & P2\_2 & P3\_2 & P4\_2 & P5\_2 \\ 
+  \hline
+0 & 0 & 1 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 \\ 
+  0 & 0 & 1 & 1 & 0 & 0 & 1 & 0 & 0 & 0 & 0 \\ 
+  0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ 
+   \hline
+\end{tabular}
+\caption{A fraction of possible unigrams with position information.} 
+\end{table}
+
+}      
+    \end{block}
+    
+    \vfill
+    
+    \begin{block}{Curse of dimensionality}
+Number of possible positioned n-grams (not taking into account distances between elemnts of n-gram):
+$$
+n_{max} = L \times m^n
+$$
+
+\centering
+\scalebox{0.85}{  
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}
+
+{\centering \includegraphics[width=\maxwidth]{figure/unnamed-chunk-4-1} 
+
+}
+
+
+
+\end{knitrout}
+}
+
+
+    \end{block}
+    \vfill
+    
+    
+    \begin{block}{Permutation test}
+      During permutation tests class labels are randomly exchanged during computation of significance statistic. p-values are defined as:
+$$\textnormal{p-value} = \frac{N_{T_P > T_R}}{N}$$
+where $N_{T_P > T_R}$ is number of times when $T_P$ (permuted test statistic) was more extreme than $T_R$ (test statistic for non-permuted data).
+
+Permutation tests are model and statistic independent, but computationally expensive (especially precise estimation of low p-values, because the number of permutations is inversely proportional to the interval between p-values).
+      
+    \end{block}
+    \vfill
+    
+    \begin{block}{QuiPT algorithm}
+      If probability that target equals 1 is $p$ and probability that feature equals
+1 is $q$ and feature and target are independent then each of them has the 
+following probabilities 
+$$P(Target, Feature) = (1,1)) = p \cdot q$$
+$$P(Target, Feature) = (1,0)) = p \cdot (1-q)$$
+$$P(Target, Feature) = (0,1)) = (1-p) \cdot q$$
+$$P(Target, Feature) = (0,0)) = (1-p) \cdot (1-q)$$
+
+\begin{equation*}
+\begin{split}
+F(n_{1,1}, n_{1,0}, n_{0,1}, n_{0,0}) = {n \choose n_{1,1}} (p\cdot q)^{n_{1,1}} {n - n_{1,1} \\ \choose n_{1,0}} (p\cdot (1-q))^{n_{1,0}} \\
+{n - n_{1,1} - n_{1,0} \\ \choose n_{0,1}} ((1-p)\cdot q)^{n_{0,1}} \\
+{n - n_{1,1} - n_{1,0} -n_{0,1}\choose n_{0,0}} \\((1-p)\cdot (1-q))^{n_{0,0}}$$
+\end{split}
+\end{equation}
+
+In addition to this: 
+$n_{1,\cdot} = n_{1,1} + n_{1,0}$ and
+$n_{\cdot, 1} = n_{1,1} + n_{0,1}$ are known and fixed.
+    \end{block}
+    \vfill
+    
+
+    
+            }
+        \end{minipage}
+      \end{beamercolorbox}
+    \end{column}
+    
+    
+%new column ------------------------------------------------------    
+    
+    \begin{column}{.52\textwidth}
+      \begin{beamercolorbox}[center,wd=\textwidth]{postercolumn}
+        \begin{minipage}[T]{.95\textwidth}  
+          \parbox[t][\columnheight]{\textwidth}
+            {
+            
+    
+    \begin{block}{Validation procedure}
+    \begin{enumerate}[1.]
+      \item Chose randomly (without replacement) 3816 proteins without signal peptides, reshuffle 3816 proteins with signal peptides.
+      \item Perform 5-fold cross-validation.
+      \item Repeat step 1. and 2. 250 times.
+    \end{enumerate} 
+    \end{block}
+    \vfill
+    
+    \begin{block}{Validation results}
+    \begin{figure}
+    \scalebox{0.85}{    
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in t(poster\_data[["{}metrics"{}]][c("{}AUC"{}, "{}H"{}, "{}Gini"{}, "{}Recall"{}, "{}Spec"{}, : object 'poster\_data' not found}}
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in ncol(metrics): object 'metrics' not found}}
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in is.factor(x): object 'melted\_metrics' not found}}
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in levels(melted\_metrics[["{}metric"{}]]) <- c("{}AUC"{}, "{}H-measure"{}, "{}Gini"{}, : object 'melted\_metrics' not found}}
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in ggplot(melted\_metrics, aes(x = metric, y = value)): object 'melted\_metrics' not found}}\end{kframe}
+\end{knitrout}
+    }
+    \end{figure}
+
+The mean AUC yielded by cross-validation is  
+    
+    \begin{figure}
+    \scalebox{0.85}{    
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): object 'poster\_data' not found}}
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): object 'position\_data' not found}}
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in ggplot(position\_data, aes(x = Var1, y = Freq)): object 'position\_data' not found}}\end{kframe}
+\end{knitrout}
+    }
+    \end{figure}
+    \end{block}
+    \vfill
+    
+    \begin{block}{Comparision with other signal peptide predictors}
+    Benchmark data set: 140 eukaryotic proteins with signal peptide and 280 randomly chosen eukaryotic proteins without signal peptide added after 2010.
+    
+    \vspace{.5cm}
+    
+    signal.hsmm1987: trained on data set of 496 eukaryotic proteins with signal peptides added before year 1987.
+    
+    \vspace{.5cm}
+    
+    signal.hsmm2010: trained on data set of 3676 eukaryotic proteins with signal peptides added before year 2010.
+    \end{block}
+    \vfill
+    
+    
+    
+    \begin{block}{Comparision of various software}
+    STH
+    \end{block}
+    \vfill
+     
+    \begin{block}{Summary}
+      Hidden semi-Markov models can be used to accurately predict the presence of secretory signal peptides effectively extracting information from very small data sets.
+    \end{block}
+    \vfill 
+    
+        \begin{block}{Avaibility}
+        \footnotesize{
+      signal.hsmm web server: 
+      
+      \url{http://michbur.shinyapps.io/signalhsmm/}$\begin{array}{l}
+        \begin{figure}[ht]
+        \centering
+        \scalebox{0.3}{
+          \includegraphics{qrsignalhsmm.png}
+        }
+        \end{figure}
+      \end{array}
+      $
+      
+      signal.hsmm R package: 
+      
+      \url{http://cran.r-project.org/web/packages/signal.hsmm/}
+        }
+    \end{block}
+    \vfill 
+     
+     
+    \begin{block}{Bibliography}
+    \tiny{
+      \bibliographystyle{apalike}
+      \bibliography{signalhsmm_poster}
+    }
+    \end{block}
+    \vfill
+            }
+        \end{minipage}
+      \end{beamercolorbox}
+    \end{column}
+  \end{columns}  
+\end{frame}
+\end{document}

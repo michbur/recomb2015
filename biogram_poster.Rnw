@@ -31,6 +31,7 @@
 \useinnertheme{rectangles}
 \setbeamercolor{item projected}{bg=darkred}
 % \setbeamertemplate{enumerate items}[default]
+\setbeamertemplate{caption}{\insertcaption} 
 \setbeamertemplate{navigation symbols}{}
 \setbeamercovered{transparent}
 \setbeamercolor{block title}{fg=darkred}
@@ -45,7 +46,7 @@
 \setbeamercolor*{itemize subsubitem}{fg=darkred}
 
 \newlength{\columnheight}
-\setlength{\columnheight}{94cm}
+\setlength{\columnheight}{90cm}
 \renewcommand{\thetable}{}
 \def\andname{,}
 \authornote{}
@@ -65,7 +66,8 @@
 library(xtable)
 library(ggplot2)
 library(reshape2)
-load("poster_data.RData")
+library(biogram)
+load("three_n_power.RData")
 
 poster_theme <- theme(plot.background=element_rect(fill = "transparent",
                                                    colour = "transparent"),
@@ -84,16 +86,24 @@ poster_theme <- theme(plot.background=element_rect(fill = "transparent",
 
 
 \date{}
-\author{Micha\l{}  Burdukiewicz\inst{1}*, Piotr Sobczyk\inst{2}, Pawe\l{} B\l{}a\.{z}ej\inst{1}, Pawe\l{} Mackiewicz\inst{1} \\
-*michalburdukiewicz@gmail.com}
+\author{Piotr Sobczyk\inst{1}*, Micha\l{}  Burdukiewicz\inst{2}, Chris Lauber\inst{3}, Pawe\l{} Mackiewicz\inst{2} \\
+*Piotr.Sobczyk@pwr.edu.pl}
 
 
-\institute{\textsuperscript{1}University of Wroc\l{}aw, Department of Genomics, Poland 
+\institute{
 
-\vspace{0.5cm}
+\textsuperscript{1}Wroc\l{}aw University of Technology, Institute of Mathematics and Computer Science, Poland
 
-\textsuperscript{2}Wroc\l{}aw University of Technology, Institute of Mathematics and Computer Science, Poland}
-\title{\huge Predicting eukaryotic signal peptides using hidden Markov models}
+\vspace{0.3cm}
+
+\textsuperscript{2}University of Wroc\l{}aw, Department of Genomics, Poland 
+
+\vspace{0.3cm}
+
+\textsuperscript{3}Dresden University of Technology, Institute of Medical Informatics and Biometry, Poland 
+
+}
+\title{\huge Quick Permutation Test: feature filtering of n-gram data}
 
 \begin{frame}
   \begin{columns}
@@ -105,110 +115,126 @@ poster_theme <- theme(plot.background=element_rect(fill = "transparent",
     
         
     \begin{block}{Introduction}
-      Secretory signal peptides:
-        \begin{itemize}
-          \item are short (20-30 residues) N-terminal amino acid sequences,
-            \item direct a protein to the endomembrane system and next to the extracellular localization,
-            \item possess three distinct domains with variable length and characteristic amino acid composition~\citep{hegde_surprising_2006}.
-            \item are universal enough to direct properly proteins in different secretory systems - artifically introduced bacterial signal peptides can guide proteins in mammals~\citep{nagano_2014} and plants~\citep{moeller_2009},
-            \item tag among others hormons, immune system proteins, structural proteins, and metabolic enzymes.
-        \end{itemize}
-    \end{block}
-    
-    \vfill
-    
-    \begin{block}{Organization of signal peptide}
-      \begin{figure}[ht]
-        \centering
-        \scalebox{1.30}{
-          \includegraphics{SP.png}
-        }
-      \end{figure}
+      N-grams (k-tuples) are vectors of n characters derived from input sequence(s). They may form continuous sub-sequences or be discontinuous. Another important n-gram parameter is its position. Instead of just counting n-grams, one may want to count how many n-grams occur at a given position in multiple (e.g. related) sequences.
 
-      \begin{itemize}
-        \item n-region: mostly basic residues~\citep{nielsen_prediction_1998},
-        \item h-region: strongly hydrophobic residues~\citep{nielsen_prediction_1998},
-        \item c-region: a few polar, uncharged residues~\citep{jain_signal_1994}.
-      \end{itemize}
-    \end{block}
-    \vfill
-    
-    
-    \begin{block}{Hidden semi-Markov model (HSMM) of a signal peptide}
-      Assumptions of the model:
-      \begin{itemize}
-        \item the observable distribution of amino acids arises due to being in a certain region (state),
-        \item a duration of the state (the length of given region) is modeled by a probability distribution (other than geometric distribution as in typical hidden Markov models).
-      \end{itemize}
-    \end{block}
-    \vfill
-    
-    \begin{block}{Training  of the algorithm}
-      \begin{enumerate}[1.]
-        \item Removal of atypical (non-standard amino acids, more than one cleavage site) or poorly annotated records from data set of proteins with signal peptide from UniProt database,
-        \item determination of n-, h-, c-regions by the heuristic algorithm,
-        \item reduction of dimensionality by aggregating amino acids to several physicochemical groups,
-        \item calculation of the amino acid group frequency in each region and the average length of the region,
-        \item training of two HSMM models for proteins with and without signal peptide.
-      \end{enumerate} 
-    \end{block}
-    \vfill
-    
-    \begin{block}{Classification of amino acids used by signal.hsmm}
-    \small{
+\small{
+       \begin{columns}[c] % the "c" option specifies center vertical alignment
+    \column{.5\textwidth} 
 <<echo = FALSE,message=FALSE,results='asis'>>=
-tabAminokwasow = function(aminokwasy, nazwyGrupy, ...) {
-  tab = cbind(data.frame(1:length(aminokwasy)), 
-              data.frame(sapply(aminokwasy, function(x) paste(x, collapse=", "))))
-  dimnames(tab) = list(nazwyGrupy, c("Group", "Amino acids"))
-  return(xtable(tab, align = c("r", "c", "l"), ...))
+tfres <- function(x, cn = c("1-ngram", "2-gram", "3-gram"),
+                  rn = round(seq(from = 0.25, to = 0.91, length.out = 6), 2)) {
+  colnames(x) <- cn
+  rownames(x) <- rn
+  x <- melt(x)
+  #significant proportion, ngram, value
+  colnames(x) <- c("sig", "ngram", "value")
+  x[["sig"]] <- as.factor(x[["sig"]])
+  x
+}
+  
+
+sample_seq <- matrix(sample(1L:4, 18, replace = TRUE), nrow = 3)
+colnames(sample_seq) <- paste0("P", 1L:ncol(sample_seq))
+rownames(sample_seq) <- paste0("S", 1L:nrow(sample_seq))
+print(xtable(data.frame(sample_seq), caption = "Sample sequences.", digits = 0))
+
+# unis <- count_ngrams(sample_seq, 1, 1L:4, pos = TRUE)
+# unis <- data.frame(as.matrix(unis))[, 1L:7]
+# print(xtable(unis, caption = "A fraction of possible unigrams with position information.", digits = 0), include.rownames = FALSE)
+@
+      
+      
+     % column designated by a command
+
+    \column{.5\textwidth}
+    
+<<echo = FALSE,message=FALSE,results='asis'>>=
+    
+     unis <- count_ngrams(sample_seq, 1, 1L:4)
+unis <- data.frame(as.matrix(unis))
+colnames(unis) <- 1L:4
+print(xtable(unis, caption = "Unigram counts.", digits = 0), include.rownames = FALSE)
+@
+
+    \end{columns}
+
+<<echo = FALSE,message=FALSE,results='asis'>>=
+    
+unis <- count_ngrams(sample_seq, 1, 1L:4, pos = TRUE)
+unis <- data.frame(as.matrix(unis))[, 1L:11]
+colnames(unis) <- substr(sub("X", "P", colnames(unis)), 0, 4)
+print(xtable(unis, caption = "A fraction of possible unigrams with position information.", digits = 0), include.rownames = FALSE)
+@
+}      
+    \end{block}
+    
+    \vfill
+    
+    \begin{block}{Curse of dimensionality}
+Number of possible positioned n-grams (not taking into account distances between elemnts of n-gram):
+$$
+n_{max} = L \times m^n
+$$
+
+\centering
+\scalebox{0.85}{  
+<<echo = FALSE,message=FALSE,fig.align='center'>>=
+library(reshape2)
+n <- 1:5
+n_max <- 4^n
+
+dat <- melt(sapply(2:5*5, function(i) i * n_max))
+dat[["Var2"]] <- factor(dat[["Var2"]])
+levels(dat[["Var2"]]) <- 2:5*5
+colnames(dat) <- c("n", "L", "n_max")
+ggplot(dat, aes(x = n, y = n_max, fill = L, col = L)) + 
+  geom_line(linetype="dotted", size=1.5) + 
+  geom_point(size=7, shape=21) +
+  scale_x_continuous(breaks = 0L:6) +
+  poster_theme
+
+@
 }
 
-aa5 = list('1' = c("K", "R", "H"),
-           '2' = c("V","I","L","M","F","W","C"),
-           '3' = c("S", "T", "N", "Q"),
-           '4' = c("D","E","A","P","Y","G"))
-print(tabAminokwasow(aa5, c("Positively charged", "Nonpolar and aliphatic",
-                            "Polar and uncharged", "Negatively charged and nonpolar")))
-@ 
-    }
+
     \end{block}
     \vfill
     
-    \begin{block}{Signal peptide prediction}
-    During the test phase, each protein is fitted to two HSMMs representing respectively proteins with and without signal peptides. The probabilities of both fits and predicted cleavage site constitute the software output.    
-    \begin{figure}
-    \centering
-    \resizebox{32.5cm}{!}{%
-    \begin{tikzpicture}[->,>=stealth',shorten >=2pt,auto,node distance=9.5cm, thick]
-      \tikzstyle{line} = [draw=black, color=blue!30!black!50, line width=4.5mm, -latex']
-      \tikzstyle{main node} = [circle,fill=blue!20,draw, minimum size = 2.2cm, font=\itshape,
-         align=center,  top color=white, bottom color=blue!50!black!70 ] %font=\sffamily\small\bfseries,
-      %nodes
-      \node[main node]          	(start') 	[]						{Start};	     
-      \node[main node, bottom color=purple!70!black!70] 	(nregion') 	[right of=start',xshift=-5mm, yshift=15mm] 	{n-region};
-      \node[main node, bottom color=pink!70!black!70] 	(hregion') 	[right of=nregion',xshift=-5mm,yshift=15mm] 	{h-region};
-      \node[main node, bottom color=gray!70!black!70] 	(cregion') 	[right of=hregion',xshift=-5mm,yshift=-15mm] 	{c-region};
-      \node[main node, bottom color=green!70!black!70] 	(mature') 	[right of=cregion',xshift=-5mm, yshift=-15mm] 	{Mature protein};
+    
+    \begin{block}{Permutation test}
+      During permutation tests class labels are randomly exchanged during computation of significance statistic. p-values are defined as:
+$$\textnormal{p-value} = \frac{N_{T_P > T_R}}{N}$$
+where $N_{T_P > T_R}$ is number of times when $T_P$ (permuted test statistic) was more extreme than $T_R$ (test statistic for non-permuted data).
+
+Permutation tests are model and statistic independent, but computationally expensive (especially precise estimation of low p-values, because the number of permutations is inversely proportional to the interval between p-values).
       
-      %lines
-      \path [line] (start')   edge node [left, color=black] {} (nregion');
-      \path [line] (nregion') edge node [below, color=black] { } (hregion');
-      \path [line] (hregion') edge node [below, color=black] { } (cregion');
-      \path [line] (cregion') edge node [left, color=black] { } (mature');
-      \draw [line] (start') to[out=340,in=200] (mature');
-    \end{tikzpicture} }
-    \end{figure}
-
-
     \end{block}
-    \vfill   
+    \vfill
     
-     \begin{block}{Data set}
-    3816 eukaryotic proteins with experimentally confirmed signal peptides and 9795 eukaryotic proteins without signal peptides (UniProtKB 2014\_07).
-    
+    \begin{block}{QuiPT algorithm}
+      If probability that target equals 1 is $p$ and probability that feature equals
+1 is $q$ and feature and target are independent then each of them has the 
+following probabilities 
+$$P(Target, Feature) = (1,1)) = p \cdot q$$
+$$P(Target, Feature) = (1,0)) = p \cdot (1-q)$$
+$$P(Target, Feature) = (0,1)) = (1-p) \cdot q$$
+$$P(Target, Feature) = (0,0)) = (1-p) \cdot (1-q)$$
+
+\begin{equation*}
+\begin{split}
+F(n_{1,1}, n_{1,0}, n_{0,1}, n_{0,0}) = {n \choose n_{1,1}} (p\cdot q)^{n_{1,1}} {n - n_{1,1} \\ \choose n_{1,0}} (p\cdot (1-q))^{n_{1,0}} \\
+{n - n_{1,1} - n_{1,0} \\ \choose n_{0,1}} ((1-p)\cdot q)^{n_{0,1}} \\
+{n - n_{1,1} - n_{1,0} -n_{0,1}\choose n_{0,0}} \\((1-p)\cdot (1-q))^{n_{0,0}}$$
+\end{split}
+\end{equation}
+
+In addition to this: 
+$n_{1,\cdot} = n_{1,1} + n_{1,0}$ and
+$n_{\cdot, 1} = n_{1,1} + n_{0,1}$ are known and fixed.
     \end{block}
-    \vfill    
+    \vfill
+    
+
     
             }
         \end{minipage}
@@ -253,7 +279,7 @@ ggplot(melted_metrics, aes(x = metric, y = value)) +
     }
     \end{figure}
 
-The mean AUC yielded by cross-validation is  \Sexpr{round(mean(unlist(poster_data[["metrics"]]["AUC", ])), 4)}
+The mean AUC yielded by cross-validation is  
     
     \begin{figure}
     \scalebox{0.85}{    
