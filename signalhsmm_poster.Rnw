@@ -65,10 +65,12 @@
 library(xtable)
 library(ggplot2)
 library(reshape2)
-load("poster_data.RData")
+library(grid)
+load("signalhsmm_poster.RData")
 
 poster_theme <- theme(plot.background=element_rect(fill = "transparent",
                                                    colour = "transparent"),
+                      plot.margin = unit(c(1,1,1,1), "cm"),
                       axis.text.x = element_text(size=16), 
                       axis.text.y = element_text(size=16),
                       axis.title.x = element_text(size=19, vjust = -1), 
@@ -227,7 +229,7 @@ print(tabAminokwasow(aa5, c("Positively charged", "Nonpolar and aliphatic",
     
     \begin{block}{Validation procedure}
     \begin{enumerate}[1.]
-      \item Chose randomly (without replacement) 3816 proteins without signal peptides, reshuffle 3816 proteins with signal peptides.
+      \item Choose randomly (without replacement) 3816 proteins without signal peptides, reshuffle 3816 proteins with signal peptides.
       \item Perform 5-fold cross-validation.
       \item Repeat step 1. and 2. 250 times.
     \end{enumerate} 
@@ -253,23 +255,32 @@ ggplot(melted_metrics, aes(x = metric, y = value)) +
     }
     \end{figure}
 
-The mean AUC yielded by cross-validation is  \Sexpr{round(mean(unlist(poster_data[["metrics"]]["AUC", ])), 4)}
+The mean AUC obtained in the cross-validation is  \Sexpr{round(mean(unlist(poster_data[["metrics"]]["AUC", ])), 4)}
     
     \begin{figure}
     \scalebox{0.85}{    
 <<echo = FALSE,message=FALSE,fig.width=14,fig.align='center'>>=
 position_data <- poster_data[["position_table"]]
 position_data[["Freq"]] <- position_data[["Freq"]]/sum(position_data[["Freq"]])
-ggplot(position_data, aes(x = Var1, y = Freq)) + 
+
+annotation <- paste0(round(sum(position_data[!(as.numeric(as.character(position_data[, "Var1"])) > -16 & as.numeric(as.character(position_data[, "Var1"])) < 16), "Freq"]), 4), " cases ommited")
+
+position_data_plot <- position_data[as.numeric(as.character(position_data[, "Var1"])) > -16 & as.numeric(as.character(position_data[, "Var1"])) < 16, ]
+
+ggplot(position_data_plot, aes(x = Var1, y = Freq)) + 
   geom_bar(stat = "identity") + 
   scale_y_continuous(name = "Proportion of predicted cleavage sites") +
-  scale_x_discrete("Absolute range from the real cleavage site") +
-  poster_theme
-
-
+  scale_x_discrete("Predicted cleavage site misplacement") +
+  poster_theme + 
+  annotate("rect", xmin = 22.5, xmax = 29.5, ymin = 0.147 + 0.1, ymax = 0.19 + 0.1,
+  alpha = 1, fill = "grey") +
+  annotate("text", x = 26, y = 0.17 + 0.1, size=6, label = annotation)
 @
     }
     \end{figure}
+    
+The mean absolute cleavage site misplacement is \Sexpr{round(poster_data[["mean"]], 4)}.
+    
     \end{block}
     \vfill
     
