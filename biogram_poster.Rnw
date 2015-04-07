@@ -180,7 +180,7 @@ $$
 \scalebox{0.85}{  
 <<echo = FALSE,message=FALSE,fig.align='center'>>=
 library(reshape2)
-n <- 1:5
+n <- 1:6
 n_max <- 4^n
 
 dat <- melt(sapply(2:5*5, function(i) i * n_max))
