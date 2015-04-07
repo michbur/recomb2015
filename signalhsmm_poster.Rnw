@@ -84,7 +84,7 @@ poster_theme <- theme(plot.background=element_rect(fill = "transparent",
 
 
 \date{}
-\author{Micha\l{}‚  Burdukiewicz\inst{1}*, Piotr Sobczyk\inst{2}, Pawe\l{}‚  B\l{}a\.{z}ej\inst{1}, Pawe\l{}‚ Mackiewicz\inst{1} \\
+\author{Micha\l{}  Burdukiewicz\inst{1}*, Piotr Sobczyk\inst{2}, Pawe\l{} B\l{}a\.{z}ej\inst{1}, Pawe\l{} Mackiewicz\inst{1} \\
 *michalburdukiewicz@gmail.com}
 
 
@@ -103,12 +103,7 @@ poster_theme <- theme(plot.background=element_rect(fill = "transparent",
           \parbox[t][\columnheight]{\textwidth}
             {
     
-    \begin{block}{Goal of the project}
-      Develop an accurate method of predicting signal peptide presence.
-    \end{block}
-    \vfill
-    
-            
+        
     \begin{block}{Introduction}
       Secretory signal peptides:
         \begin{itemize}
@@ -125,7 +120,7 @@ poster_theme <- theme(plot.background=element_rect(fill = "transparent",
     \begin{block}{Organization of signal peptide}
       \begin{figure}[ht]
         \centering
-        \scalebox{1.35}{
+        \scalebox{1.30}{
           \includegraphics{SP.png}
         }
       \end{figure}
@@ -160,6 +155,7 @@ poster_theme <- theme(plot.background=element_rect(fill = "transparent",
     \vfill
     
     \begin{block}{Classification of amino acids used by signal.hsmm}
+    \small{
 <<echo = FALSE,message=FALSE,results='asis'>>=
 tabAminokwasow = function(aminokwasy, nazwyGrupy, ...) {
   tab = cbind(data.frame(1:length(aminokwasy)), 
@@ -175,6 +171,7 @@ aa5 = list('1' = c("K", "R", "H"),
 print(tabAminokwasow(aa5, c("Positively charged", "Nonpolar and aliphatic",
                             "Polar and uncharged", "Negatively charged and nonpolar")))
 @ 
+    }
     \end{block}
     \vfill
     
@@ -205,7 +202,13 @@ print(tabAminokwasow(aa5, c("Positively charged", "Nonpolar and aliphatic",
 
 
     \end{block}
-    \vfill     
+    \vfill   
+    
+     \begin{block}{Data set}
+    3816 eukaryotic proteins with experimentally confirmed signal peptides and 9795 eukaryotic proteins without signal peptides (UniProtKB 2014\_07).
+    
+    \end{block}
+    \vfill    
     
             }
         \end{minipage}
@@ -221,32 +224,26 @@ print(tabAminokwasow(aa5, c("Positively charged", "Nonpolar and aliphatic",
           \parbox[t][\columnheight]{\textwidth}
             {
             
-       
-    \begin{block}{Data set}
-    3816 eukaryotic proteins with experimentally confirmed signal peptides and 9795 eukaryotic proteins without signal peptides downloaded from UniProt database release 2014\_07.
-    
-    \end{block}
-    \vfill    
     
     \begin{block}{Validation procedure}
     \begin{enumerate}[1.]
-      \item Chose randomly (without replacement) 3816 proteins without signal peptides and train the algorithm (called signal.hsmm) and reshuffle 3816 proteins with signal peptides.
+      \item Chose randomly (without replacement) 3816 proteins without signal peptides, reshuffle 3816 proteins with signal peptides.
       \item Perform 5-fold cross-validation.
       \item Repeat step 1. and 2. 250 times.
     \end{enumerate} 
     \end{block}
     \vfill
     
-    \begin{block}{Performance measures}
+    \begin{block}{Validation results}
     \begin{figure}
-    \scalebox{0.88}{    
+    \scalebox{0.85}{    
 <<echo = FALSE,message=FALSE,fig.width=14,fig.align='center'>>=
-metrics <- t(poster_data[["metrics"]][c("AUC", "H", "Gini", "Sens", "Spec", "Precision"), ])
+metrics <- t(poster_data[["metrics"]][c("AUC", "H", "Gini", "Recall", "Spec", "Precision"), ])
 melted_metrics <- do.call(rbind, lapply(1L:ncol(metrics), function(i)
        data.frame(metric = rep(colnames(metrics)[i], nrow(metrics)),
                   value = unlist(metrics[, i]))))
 melted_metrics[["metric"]] <- as.factor(melted_metrics[["metric"]])
-levels(melted_metrics[["metric"]]) <- c("AUC", "H-measure", "Gini", "Sensitivity", "Specificity", "Precision")
+levels(melted_metrics[["metric"]]) <- c("AUC", "H-measure", "Gini", "Recall", "Specificity", "Precision")
 ggplot(melted_metrics, aes(x = metric, y = value)) + 
   geom_boxplot() +
   scale_x_discrete(name = "Performance measure") + 
@@ -255,13 +252,11 @@ ggplot(melted_metrics, aes(x = metric, y = value)) +
 @
     }
     \end{figure}
-    \end{block}
-    \vfill
+
+The mean AUC yielded by cross-validation is  \Sexpr{round(mean(unlist(poster_data[["metrics"]]["AUC", ])), 4)}
     
-    
-    \begin{block}{Cleavage site prediction}
     \begin{figure}
-    \scalebox{0.88}{    
+    \scalebox{0.85}{    
 <<echo = FALSE,message=FALSE,fig.width=14,fig.align='center'>>=
 position_data <- poster_data[["position_table"]]
 position_data[["Freq"]] <- position_data[["Freq"]]/sum(position_data[["Freq"]])
