@@ -270,8 +270,8 @@ $P(Target, Feature) = (0,0)) = (1-p) \cdot (1-q)$
 
 \\
 
-So, this shows that what we actually get is a contingency table that needs to 
-tested for independance.
+Therefore another view is that we get a contingency table that needs to 
+be tested for independance.
   \end{block}
   \vfill
   
@@ -302,10 +302,10 @@ F(n_{1,1}, n_{1,0}, n_{0,1}, n_{0,0}) =
 \end{split}
 
 
-Our data gives constraints:
+This distribution comes with two constraints:
 $n_{1,\cdot} = n_{1,1} + n_{1,0}$ and
 $n_{\cdot, 1} = n_{1,1} + n_{0,1}$.
-Thus, conditioning on $n_{1,1}$ we get hypergeometric distribution.
+Thus, conditioning on $n_{1,1}$, we get hypergeometric distribution.
 
 This is in fact exact two-sided Fisher's test. Information Gain is used here 
 as a way of deciding which contingency tables are more extreme.
@@ -396,6 +396,8 @@ no_sig <- matrix(apply(fs_dat, 1, function(i)
 fs <- data.frame(tfres(fs_mean), 
                  no_sig = (length(three_n_power) - tfres(no_sig)[["value"]])/length(three_n_power),
                  power=tfres(power)$value)
+#making signal strength number from range [0,1]
+fs$sig <- as.factor((as.numeric(fs$sig)-1)/5) 
 
 p <- ggplot(fs, aes(x = ngram, y = sig, fill = power)) + 
   geom_tile() +
@@ -403,7 +405,7 @@ p <- ggplot(fs, aes(x = ngram, y = sig, fill = power)) +
                         high = "#00CC00", low =  "#CCFFCC") +
   geom_point(aes(x = ngram, y = sig, size = value), range = c(5, 12)) +
   scale_size_continuous("False significant \nfeature frequency") +
-  ylab("Signal strengh") + xlab("N-gram size") +
+  ylab("Signal strength") + xlab("N-gram size") +
   poster_theme
 p +   geom_abline(intercept=1.5, slope=0.0, color="#666666", size=5) 
 
