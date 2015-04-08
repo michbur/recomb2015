@@ -150,16 +150,16 @@
        \begin{columns}[c] % the "c" option specifies center vertical alignment
     \column{.5\textwidth} 
 % latex table generated in R 3.1.3 by xtable 1.7-4 package
-% Tue Apr 07 22:54:20 2015
+% Wed Apr  8 09:02:14 2015
 \begin{table}[ht]
 \centering
 \begin{tabular}{rrrrrrr}
   \hline
  & P1 & P2 & P3 & P4 & P5 & P6 \\ 
   \hline
-S1 & 2 & 3 & 1 & 1 & 2 & 3 \\ 
-  S2 & 3 & 2 & 3 & 2 & 2 & 2 \\ 
-  S3 & 4 & 2 & 2 & 1 & 3 & 1 \\ 
+S1 & 4 & 3 & 1 & 1 & 2 & 3 \\ 
+  S2 & 4 & 4 & 3 & 3 & 4 & 4 \\ 
+  S3 & 3 & 1 & 1 & 4 & 4 & 2 \\ 
    \hline
 \end{tabular}
 \caption{Sample sequences.} 
@@ -172,16 +172,16 @@ S1 & 2 & 3 & 1 & 1 & 2 & 3 \\
     \column{.5\textwidth}
     
 % latex table generated in R 3.1.3 by xtable 1.7-4 package
-% Tue Apr 07 22:54:20 2015
+% Wed Apr  8 09:02:14 2015
 \begin{table}[ht]
 \centering
 \begin{tabular}{rrrr}
   \hline
 1 & 2 & 3 & 4 \\ 
   \hline
-2 & 2 & 2 & 0 \\ 
-  0 & 4 & 2 & 0 \\ 
-  2 & 2 & 1 & 1 \\ 
+2 & 1 & 2 & 1 \\ 
+  0 & 0 & 2 & 4 \\ 
+  2 & 1 & 1 & 2 \\ 
    \hline
 \end{tabular}
 \caption{Unigram counts.} 
@@ -191,33 +191,45 @@ S1 & 2 & 3 & 1 & 1 & 2 & 3 \\
     \end{columns}
 
 % latex table generated in R 3.1.3 by xtable 1.7-4 package
-% Tue Apr 07 22:54:20 2015
+% Wed Apr  8 09:02:14 2015
 \begin{table}[ht]
 \centering
-\begin{tabular}{rrrrrrrrrrr}
+\begin{tabular}{rrrrrrrrrrrrr}
   \hline
-P1\_1 & P2\_1 & P3\_1 & P4\_1 & P5\_1 & P6\_1 & P1\_2 & P2\_2 & P3\_2 & P4\_2 & P5\_2 \\ 
+P1\_1 & P2\_1 & P3\_1 & P4\_1 & P5\_1 & P6\_1 & P1\_2 & P2\_2 & P3\_2 & P4\_2 & P5\_2 & P6\_2 & P1\_3 \\ 
   \hline
-0 & 0 & 1 & 1 & 0 & 0 & 1 & 0 & 0 & 0 & 1 \\ 
-  0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 1 & 1 \\ 
-  0 & 0 & 0 & 1 & 0 & 1 & 0 & 1 & 1 & 0 & 0 \\ 
+0 & 0 & 1 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 \\ 
+  0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ 
+  0 & 1 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 1 \\ 
    \hline
 \end{tabular}
 \caption{A fraction of possible unigrams with position information.} 
 \end{table}
 
-}      
+}    
+Originally developed for natural language processing, n-grams are also used in proteomics, genomics and transcriptomics.
+
+
     \end{block}
     
     \vfill
     
     \begin{block}{Curse of dimensionality}
-Number of possible positioned n-grams (not taking into account distances between elemnts of n-gram):
-$$
-n_{max} = L \times m^n
-$$
+    
+Even when we limit ourselves to only continuous positioned n-grams, feature space growths rapidly with the number of elements in n-gram ($n$) and length of the sequence ($L$).    
+    
+Number of possible positioned n-grams: 
 
-\centering
+\begin{center}
+\scalebox{0.85}{
+$
+n_{\text{max}} = L \times m^n
+$
+}
+
+\\
+
+
 \scalebox{0.85}{  
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}
@@ -230,48 +242,76 @@ $$
 
 \end{knitrout}
 }
-
-
+\end{center}
     \end{block}
     \vfill
     
     
-    \begin{block}{Permutation test}
-      During permutation tests class labels are randomly exchanged during computation of significance statistic. p-values are defined as:
-$$\textnormal{p-value} = \frac{N_{T_P > T_R}}{N}$$
+    \begin{block}{Feature selecting permutation tests}
+    Model and statistic independent permutation tests can be used to filter features obtained through counting n-grams.
+    
+    During a permutation test class labels are randomly exchanged during computation of significance statistic. p-values are defined as:
+    
+\begin{center}
+\scalebox{0.85}{
+$      
+\textnormal{p-value} = \frac{N_{T_P > T_R}}{N}
+$
+}
+\end{center}
+
 where $N_{T_P > T_R}$ is number of times when $T_P$ (permuted test statistic) was more extreme than $T_R$ (test statistic for non-permuted data).
 
-Permutation tests are model and statistic independent, but computationally expensive (especially precise estimation of low p-values, because the number of permutations is inversely proportional to the interval between p-values).
+Permutation tests are computationally expensive (especially precise estimation of low p-values, because the number of permutations is inversely proportional to the interval between p-values).
       
     \end{block}
     \vfill
+    
     
     \begin{block}{QuiPT algorithm}
       If probability that target equals 1 is $p$ and probability that feature equals
 1 is $q$ and feature and target are independent then each of them has the 
 following probabilities 
-$$P(Target, Feature) = (1,1)) = p \cdot q$$
-$$P(Target, Feature) = (1,0)) = p \cdot (1-q)$$
-$$P(Target, Feature) = (0,1)) = (1-p) \cdot q$$
-$$P(Target, Feature) = (0,0)) = (1-p) \cdot (1-q)$$
 
-\begin{equation*}
-\begin{split}
-F(n_{1,1}, n_{1,0}, n_{0,1}, n_{0,0}) = {n \choose n_{1,1}} (p\cdot q)^{n_{1,1}} {n - n_{1,1} \\ \choose n_{1,0}} (p\cdot (1-q))^{n_{1,0}} \\
-{n - n_{1,1} - n_{1,0} \\ \choose n_{0,1}} ((1-p)\cdot q)^{n_{0,1}} \\
-{n - n_{1,1} - n_{1,0} -n_{0,1}\choose n_{0,0}} \\((1-p)\cdot (1-q))^{n_{0,0}}$$
-\end{split}
-\end{equation}
+\begin{center}
+\scalebox{0.85}{
+$P(Target, Feature) = (1,1)) = p \cdot q$
+}
+\end{center}
 
-In addition to this: 
-$n_{1,\cdot} = n_{1,1} + n_{1,0}$ and
-$n_{\cdot, 1} = n_{1,1} + n_{0,1}$ are known and fixed.
-    \end{block}
-    \vfill
+\\
+
+\begin{center}
+\scalebox{0.85}{
+$P(Target, Feature) = (1,0)) = p \cdot (1-q)$
+}
+\end{center}
+
+\\
+
+\begin{center}
+\scalebox{0.85}{
+$P(Target, Feature) = (0,1)) = (1-p) \cdot q$
+}
+\end{center}
+
+\\
+
+\begin{center}
+\scalebox{0.85}{
+$P(Target, Feature) = (0,0)) = (1-p) \cdot (1-q)$
+}
+\end{center}
+
+\\
+
+So, this shows that what we actually get is a contingency table that needs to 
+tested for independance.
+  \end{block}
+  \vfill
+  
     
-
-    
-            }
+    }
         \end{minipage}
       \end{beamercolorbox}
     \end{column}
@@ -284,14 +324,36 @@ $n_{\cdot, 1} = n_{1,1} + n_{0,1}$ are known and fixed.
         \begin{minipage}[T]{.95\textwidth}  
           \parbox[t][\columnheight]{\textwidth}
             {
-            
+     
+    \begin{block}{Independence test}
+    
+
+\begin{split*}
+F(n_{1,1}, n_{1,0}, n_{0,1}, n_{0,0}) = 
+{n \choose n_{1,1}} (p\cdot q)^{n_{1,1}} 
+{ n - n_{1,1} \choose n_{1,0}} (p\cdot (1-q))^{n_{1,0}} \\
+{n - n_{1,1} - n_{1,0} \choose n_{0,1}} ((1-p)\cdot q)^{n_{0,1}} 
+{n - n_{1,1} - n_{1,0} -n_{0,1} \choose n_{0,0}} ((1-p)\cdot (1-q))^{n_{0,0}}$$
+\end{split}
+
+
+Our data gives constraints:
+$n_{1,\cdot} = n_{1,1} + n_{1,0}$ and
+$n_{\cdot, 1} = n_{1,1} + n_{0,1}$.
+Thus, conditioning on $n_{1,1}$ we get hypergeometric distribution.
+
+This is in fact exact two-sided Fisher's test. Information Gain is used here 
+as a way of deciding which contingency tables are more extreme.
+    \end{block}
+    \vfill 
+     
     
     \begin{block}{Validation procedure}
     
     
     \begin{columns}
     \centering
-    \column{.6\textwidth} 
+    \column{.5\textwidth} 
     \scalebox{0.95}{
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}
@@ -306,10 +368,10 @@ $n_{\cdot, 1} = n_{1,1} + n_{0,1}$ are known and fixed.
 }
 \column{.5\textwidth}
 % latex table generated in R 3.1.3 by xtable 1.7-4 package
-% Tue Apr 07 22:54:21 2015
+% Wed Apr  8 09:02:15 2015
 \begin{table}[ht]
 \centering
-\begin{tabular}{rllr}
+\begin{tabular}{|c|ccc|}
   \hline
  & Target & Feature & Freq \\ 
   \hline
@@ -326,30 +388,39 @@ $n_{\cdot, 1} = n_{1,1} + n_{0,1}$ are known and fixed.
     \end{block}
     \vfill
     
-    \begin{block}{Test power}
+%     \begin{block}{Test power}
+%     \centering
+% \scalebox{0.95}{  
+% <<echo = FALSE,message=FALSE,eval=FALSE,fig.align='center'>>=
+% 
+% three_n_power <- three_n_power[sapply(three_n_power, function(i) i[[6]][[3]][2]) > 150]
+% 
+% power <- Reduce("+", lapply(three_n_power, function(single_rep) {
+%   #single replication dat
+%   sr_dat <- do.call(rbind, lapply(single_rep, unlist))
+%   sr_dat[, c(1, 3, 5)]/matrix(rep(c(4, 32, 192), 6), nrow = 6, byrow = TRUE)
+% }))/length(three_n_power)
+% 
+% ggplot(tfres(power), aes(x = ngram, y = value, fill = sig)) + 
+%   geom_bar(stat = "identity", position = "dodge") +
+%   scale_y_continuous("Important features found (%)") +
+%   scale_x_discrete("n-gram") +
+%   scale_fill_discrete("Signal strength") +
+%   poster_theme
+% 
+% 
+% @
+% }
+% \end{block}
+%     \vfill
+
+\begin{block}{Power and False discoveries}
     \centering
-\scalebox{0.95}{  
+\scalebox{1}{  
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}
 
 {\centering \includegraphics[width=\maxwidth]{figure/unnamed-chunk-7-1} 
-
-}
-
-
-
-\end{knitrout}
-}
-\end{block}
-    \vfill
-
-\begin{block}{False discoveries}
-    \centering
-\scalebox{0.95}{  
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}
-
-{\centering \includegraphics[width=\maxwidth]{figure/unnamed-chunk-8-1} 
 
 }
 

@@ -161,24 +161,36 @@ print(xtable(unis, caption = "Unigram counts.", digits = 0), include.rownames = 
 <<echo = FALSE,message=FALSE,results='asis'>>=
     
 unis <- count_ngrams(sample_seq, 1, 1L:4, pos = TRUE)
-unis <- data.frame(as.matrix(unis))[, 1L:11]
+unis <- data.frame(as.matrix(unis))[, 1L:13]
 colnames(unis) <- substr(sub("X", "P", colnames(unis)), 0, 4)
 print(xtable(unis, caption = "A fraction of possible unigrams with position information.", digits = 0), include.rownames = FALSE)
 @
-}      
+}    
+Originally developed for natural language processing, n-grams are also used in proteomics, genomics and transcriptomics.
+
+
     \end{block}
     
     \vfill
     
     \begin{block}{Curse of dimensionality}
-Number of possible positioned n-grams (not taking into account distances between elemnts of n-gram):
-$$
-n_{max} = L \times m^n
-$$
+    
+Even when we limit ourselves to only continuous positioned n-grams, feature space growths rapidly with the number of elements in n-gram ($n$) and length of the sequence ($L$).    
+    
+Number of possible positioned n-grams: 
 
-\centering
+\begin{center}
+\scalebox{0.85}{
+$
+n_{\text{max}} = L \times m^n
+$
+}
+
+\\
+
+
 \scalebox{0.85}{  
-<<echo = FALSE,message=FALSE,fig.align='center'>>=
+<<echo = FALSE,message=FALSE,fig.align='center',fig.width=14>>=
 library(reshape2)
 n <- 1:6
 n_max <- 4^n
@@ -195,57 +207,76 @@ ggplot(dat, aes(x = n, y = n_max, fill = L, col = L)) +
 
 @
 }
-
-
+\end{center}
     \end{block}
     \vfill
     
     
-    \begin{block}{Permutation test}
-      During permutation tests class labels are randomly exchanged during computation of significance statistic. p-values are defined as:
-$$\textnormal{p-value} = \frac{N_{T_P > T_R}}{N}$$
+    \begin{block}{Feature selecting permutation tests}
+    Model and statistic independent permutation tests can be used to filter features obtained through counting n-grams.
+    
+    During a permutation test class labels are randomly exchanged during computation of significance statistic. p-values are defined as:
+    
+\begin{center}
+\scalebox{0.85}{
+$      
+\textnormal{p-value} = \frac{N_{T_P > T_R}}{N}
+$
+}
+\end{center}
+
 where $N_{T_P > T_R}$ is number of times when $T_P$ (permuted test statistic) was more extreme than $T_R$ (test statistic for non-permuted data).
 
-Permutation tests are model and statistic independent, but computationally expensive (especially precise estimation of low p-values, because the number of permutations is inversely proportional to the interval between p-values).
+Permutation tests are computationally expensive (especially precise estimation of low p-values, because the number of permutations is inversely proportional to the interval between p-values).
       
     \end{block}
     \vfill
+    
     
     \begin{block}{QuiPT algorithm}
       If probability that target equals 1 is $p$ and probability that feature equals
 1 is $q$ and feature and target are independent then each of them has the 
 following probabilities 
-$$P(Target, Feature) = (1,1)) = p \cdot q$$
-$$P(Target, Feature) = (1,0)) = p \cdot (1-q)$$
-$$P(Target, Feature) = (0,1)) = (1-p) \cdot q$$
-$$P(Target, Feature) = (0,0)) = (1-p) \cdot (1-q)$$
+
+\begin{center}
+\scalebox{0.85}{
+$P(Target, Feature) = (1,1)) = p \cdot q$
+}
+\end{center}
+
+\\
+
+\begin{center}
+\scalebox{0.85}{
+$P(Target, Feature) = (1,0)) = p \cdot (1-q)$
+}
+\end{center}
+
+\\
+
+\begin{center}
+\scalebox{0.85}{
+$P(Target, Feature) = (0,1)) = (1-p) \cdot q$
+}
+\end{center}
+
+\\
+
+\begin{center}
+\scalebox{0.85}{
+$P(Target, Feature) = (0,0)) = (1-p) \cdot (1-q)$
+}
+\end{center}
+
+\\
 
 So, this shows that what we actually get is a contingency table that needs to 
 tested for independance.
-
-\begin{equation*}
-\begin{split}
-F(n_{1,1}, n_{1,0}, n_{0,1}, n_{0,0}) = \\ 
-{n \choose n_{1,1}} (p\cdot q)^{n_{1,1}} 
-{ n - n_{1,1} \choose n_{1,0}} (p\cdot (1-q))^{n_{1,0}} \\
-{n - n_{1,1} - n_{1,0} \choose n_{0,1}} ((1-p)\cdot q)^{n_{0,1}} \\
-{n - n_{1,1} - n_{1,0} -n_{0,1} \choose n_{0,0}} ((1-p)\cdot (1-q))^{n_{0,0}}$$
-\end{split}
-\end{equation}
-
-Our data gives constraints:
-$n_{1,\cdot} = n_{1,1} + n_{1,0}$ and
-$n_{\cdot, 1} = n_{1,1} + n_{0,1}$.
-Thus, conditioning on $n_{1,1}$ we get hypergeometric distribution.
-
-This is in fact exact two-sided Fisher's test. Information Gain is used here 
-as a way of deciding which contingency tables are more extreme.
-    \end{block}
-    \vfill
+  \end{block}
+  \vfill
+  
     
-
-    
-            }
+    }
         \end{minipage}
       \end{beamercolorbox}
     \end{column}
@@ -258,7 +289,29 @@ as a way of deciding which contingency tables are more extreme.
         \begin{minipage}[T]{.95\textwidth}  
           \parbox[t][\columnheight]{\textwidth}
             {
-            
+     
+    \begin{block}{Independence test}
+    
+
+\begin{split*}
+F(n_{1,1}, n_{1,0}, n_{0,1}, n_{0,0}) = 
+{n \choose n_{1,1}} (p\cdot q)^{n_{1,1}} 
+{ n - n_{1,1} \choose n_{1,0}} (p\cdot (1-q))^{n_{1,0}} \\
+{n - n_{1,1} - n_{1,0} \choose n_{0,1}} ((1-p)\cdot q)^{n_{0,1}} 
+{n - n_{1,1} - n_{1,0} -n_{0,1} \choose n_{0,0}} ((1-p)\cdot (1-q))^{n_{0,0}}$$
+\end{split}
+
+
+Our data gives constraints:
+$n_{1,\cdot} = n_{1,1} + n_{1,0}$ and
+$n_{\cdot, 1} = n_{1,1} + n_{0,1}$.
+Thus, conditioning on $n_{1,1}$ we get hypergeometric distribution.
+
+This is in fact exact two-sided Fisher's test. Information Gain is used here 
+as a way of deciding which contingency tables are more extreme.
+    \end{block}
+    \vfill 
+     
     
     \begin{block}{Validation procedure}
     
@@ -270,7 +323,7 @@ as a way of deciding which contingency tables are more extreme.
 <<echo = FALSE,message=FALSE,fig.align='center'>>=
 target_feature <- create_feature_target(40, 10, 25, 40)
 tmp <- distr_crit(target = target_feature[,1], feature = target_feature[,2])
-biogram:::ggplot2.criterion_distribution(tmp)
+biogram:::ggplot2.criterion_distribution(tmp) + poster_theme
 @
 }
 \column{.5\textwidth}
