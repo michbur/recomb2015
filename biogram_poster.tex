@@ -150,16 +150,16 @@
        \begin{columns}[c] % the "c" option specifies center vertical alignment
     \column{.5\textwidth} 
 % latex table generated in R 3.1.3 by xtable 1.7-4 package
-% Wed Apr  8 09:02:14 2015
+% Wed Apr  8 10:03:57 2015
 \begin{table}[ht]
 \centering
 \begin{tabular}{rrrrrrr}
   \hline
  & P1 & P2 & P3 & P4 & P5 & P6 \\ 
   \hline
-S1 & 4 & 3 & 1 & 1 & 2 & 3 \\ 
-  S2 & 4 & 4 & 3 & 3 & 4 & 4 \\ 
-  S3 & 3 & 1 & 1 & 4 & 4 & 2 \\ 
+S1 & 2 & 1 & 3 & 3 & 2 & 4 \\ 
+  S2 & 1 & 1 & 1 & 2 & 4 & 3 \\ 
+  S3 & 2 & 2 & 1 & 4 & 2 & 1 \\ 
    \hline
 \end{tabular}
 \caption{Sample sequences.} 
@@ -172,16 +172,16 @@ S1 & 4 & 3 & 1 & 1 & 2 & 3 \\
     \column{.5\textwidth}
     
 % latex table generated in R 3.1.3 by xtable 1.7-4 package
-% Wed Apr  8 09:02:14 2015
+% Wed Apr  8 10:03:57 2015
 \begin{table}[ht]
 \centering
 \begin{tabular}{rrrr}
   \hline
 1 & 2 & 3 & 4 \\ 
   \hline
-2 & 1 & 2 & 1 \\ 
-  0 & 0 & 2 & 4 \\ 
-  2 & 1 & 1 & 2 \\ 
+1 & 2 & 2 & 1 \\ 
+  3 & 1 & 1 & 1 \\ 
+  2 & 3 & 0 & 1 \\ 
    \hline
 \end{tabular}
 \caption{Unigram counts.} 
@@ -191,16 +191,16 @@ S1 & 4 & 3 & 1 & 1 & 2 & 3 \\
     \end{columns}
 
 % latex table generated in R 3.1.3 by xtable 1.7-4 package
-% Wed Apr  8 09:02:14 2015
+% Wed Apr  8 10:03:57 2015
 \begin{table}[ht]
 \centering
 \begin{tabular}{rrrrrrrrrrrrr}
   \hline
 P1\_1 & P2\_1 & P3\_1 & P4\_1 & P5\_1 & P6\_1 & P1\_2 & P2\_2 & P3\_2 & P4\_2 & P5\_2 & P6\_2 & P1\_3 \\ 
   \hline
-0 & 0 & 1 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 \\ 
-  0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ 
-  0 & 1 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 1 \\ 
+0 & 1 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 1 & 0 & 0 \\ 
+  1 & 1 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 \\ 
+  0 & 0 & 1 & 0 & 0 & 1 & 1 & 1 & 0 & 0 & 1 & 0 & 0 \\ 
    \hline
 \end{tabular}
 \caption{A fraction of possible unigrams with position information.} 
@@ -305,8 +305,8 @@ $P(Target, Feature) = (0,0)) = (1-p) \cdot (1-q)$
 
 \\
 
-So, this shows that what we actually get is a contingency table that needs to 
-tested for independance.
+Therefore another view is that we get a contingency table that needs to 
+be tested for independance.
   \end{block}
   \vfill
   
@@ -337,10 +337,10 @@ F(n_{1,1}, n_{1,0}, n_{0,1}, n_{0,0}) =
 \end{split}
 
 
-Our data gives constraints:
+This distribution comes with two constraints:
 $n_{1,\cdot} = n_{1,1} + n_{1,0}$ and
 $n_{\cdot, 1} = n_{1,1} + n_{0,1}$.
-Thus, conditioning on $n_{1,1}$ we get hypergeometric distribution.
+Thus, conditioning on $n_{1,1}$, we get hypergeometric distribution.
 
 This is in fact exact two-sided Fisher's test. Information Gain is used here 
 as a way of deciding which contingency tables are more extreme.
@@ -368,7 +368,7 @@ as a way of deciding which contingency tables are more extreme.
 }
 \column{.5\textwidth}
 % latex table generated in R 3.1.3 by xtable 1.7-4 package
-% Wed Apr  8 09:02:15 2015
+% Wed Apr  8 10:03:58 2015
 \begin{table}[ht]
 \centering
 \begin{tabular}{|c|ccc|}
