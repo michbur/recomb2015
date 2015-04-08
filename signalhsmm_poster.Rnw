@@ -45,7 +45,7 @@
 \setbeamercolor*{itemize subsubitem}{fg=darkred}
 
 \newlength{\columnheight}
-\setlength{\columnheight}{94cm}
+\setlength{\columnheight}{96cm}
 \renewcommand{\thetable}{}
 \def\andname{,}
 \authornote{}
@@ -71,14 +71,14 @@ load("signalhsmm_poster.RData")
 poster_theme <- theme(plot.background=element_rect(fill = "transparent",
                                                    colour = "transparent"),
                       plot.margin = unit(c(1,1,1,1), "cm"),
-                      axis.text.x = element_text(size=16), 
-                      axis.text.y = element_text(size=16),
-                      axis.title.x = element_text(size=19, vjust = -1), 
-                      axis.title.y = element_text(size=19, vjust = 1),
-                      strip.text = element_text(size=19),
-                      legend.text = element_text(size=16), 
-                      legend.title = element_text(size=19),
-                      plot.title = element_text(size=27),
+                      axis.text.x = element_text(size=17), 
+                      axis.text.y = element_text(size=17),
+                      axis.title.x = element_text(size=20, vjust = -1), 
+                      axis.title.y = element_text(size=20, vjust = 1),
+                      strip.text = element_text(size=20),
+                      legend.text = element_text(size=17), 
+                      legend.title = element_text(size=20),
+                      plot.title = element_text(size=28),
                       panel.background = element_rect(fill = "transparent",colour = "black"),
                       legend.direction="horizontal", legend.position = "bottom",
                       legend.background = element_rect(fill="NA"))
@@ -90,16 +90,16 @@ poster_theme <- theme(plot.background=element_rect(fill = "transparent",
 *michalburdukiewicz@gmail.com}
 
 
-\institute{\textsuperscript{1}University of Wroc\l{}aw, Department of Genomics, Poland 
+\institute{\small{\textsuperscript{1}University of Wroc\l{}aw, Department of Genomics, Poland 
 
-\vspace{0.5cm}
+\vspace{0.2cm}
 
-\textsuperscript{2}Wroc\l{}aw University of Technology, Institute of Mathematics and Computer Science, Poland}
+\textsuperscript{2}Wroc\l{}aw University of Technology, Institute of Mathematics and Computer Science, Poland}}
 \title{\huge Predicting eukaryotic signal peptides using hidden Markov models}
 
 \begin{frame}
   \begin{columns}
-    \begin{column}{.49\textwidth}
+    \begin{column}{.46\textwidth}
       \begin{beamercolorbox}[center,wd=\textwidth]{postercolumn}
         \begin{minipage}[T]{.95\textwidth}
           \parbox[t][\columnheight]{\textwidth}
@@ -112,7 +112,7 @@ poster_theme <- theme(plot.background=element_rect(fill = "transparent",
           \item are short (20-30 residues) N-terminal amino acid sequences,
             \item direct a protein to the endomembrane system and next to the extracellular localization,
             \item possess three distinct domains with variable length and characteristic amino acid composition~\citep{hegde_surprising_2006}.
-            \item are universal enough to direct properly proteins in different secretory systems - artifically introduced bacterial signal peptides can guide proteins in mammals~\citep{nagano_2014} and plants~\citep{moeller_2009},
+            \item are universal enough to direct properly proteins in different secretory systems; artifically introduced bacterial signal peptides can guide proteins in mammals~\citep{nagano_2014} and plants~\citep{moeller_2009},
             \item tag among others hormons, immune system proteins, structural proteins, and metabolic enzymes.
         \end{itemize}
     \end{block}
@@ -122,7 +122,7 @@ poster_theme <- theme(plot.background=element_rect(fill = "transparent",
     \begin{block}{Organization of signal peptide}
       \begin{figure}[ht]
         \centering
-        \scalebox{1.30}{
+        \scalebox{1.3}{
           \includegraphics{SP.png}
         }
       \end{figure}
@@ -145,9 +145,9 @@ poster_theme <- theme(plot.background=element_rect(fill = "transparent",
     \end{block}
     \vfill
     
-    \begin{block}{Training  of the algorithm}
+    \begin{block}{Training  of the signal.hsmm algorithm}
       \begin{enumerate}[1.]
-        \item Removal of atypical (non-standard amino acids, more than one cleavage site) or poorly annotated records from data set of proteins with signal peptide from UniProt database,
+        \item Removal of atypical (non-standard amino acids, more than one cleavage site) or poorly annotated records from data set of proteins with signal peptide from UniProtKB 2014\_07 (after purification data set contains 3816 eukaryotic proteins with experimentally confirmed signal peptides and 9795 without signal peptide),
         \item determination of n-, h-, c-regions by the heuristic algorithm,
         \item reduction of dimensionality by aggregating amino acids to several physicochemical groups,
         \item calculation of the amino acid group frequency in each region and the average length of the region,
@@ -206,11 +206,6 @@ print(tabAminokwasow(aa5, c("Positively charged", "Nonpolar and aliphatic",
     \end{block}
     \vfill   
     
-     \begin{block}{Data set}
-    3816 eukaryotic proteins with experimentally confirmed signal peptides and 9795 eukaryotic proteins without signal peptides (UniProtKB 2014\_07).
-    
-    \end{block}
-    \vfill    
     
             }
         \end{minipage}
@@ -220,7 +215,7 @@ print(tabAminokwasow(aa5, c("Positively charged", "Nonpolar and aliphatic",
     
 %new column ------------------------------------------------------    
     
-    \begin{column}{.52\textwidth}
+    \begin{column}{.54\textwidth}
       \begin{beamercolorbox}[center,wd=\textwidth]{postercolumn}
         \begin{minipage}[T]{.95\textwidth}  
           \parbox[t][\columnheight]{\textwidth}
@@ -238,7 +233,7 @@ print(tabAminokwasow(aa5, c("Positively charged", "Nonpolar and aliphatic",
     
     \begin{block}{Validation results}
     \begin{figure}
-    \scalebox{0.87}{    
+    \scalebox{0.89}{    
 <<echo = FALSE,message=FALSE,fig.width=14,fig.align='center'>>=
 metrics <- t(poster_data[["metrics"]][c("AUC", "H", "Gini", "Recall", "Spec", "Precision"), ])
 melted_metrics <- do.call(rbind, lapply(1L:ncol(metrics), function(i)
@@ -258,7 +253,7 @@ ggplot(melted_metrics, aes(x = metric, y = value)) +
 The mean AUC obtained in the cross-validation is  \Sexpr{round(mean(unlist(poster_data[["metrics"]]["AUC", ])), 4)}
     
     \begin{figure}
-    \scalebox{0.85}{    
+    \scalebox{0.89}{    
 <<echo = FALSE,message=FALSE,fig.width=14,fig.align='center'>>=
 position_data <- poster_data[["position_table"]]
 position_data[["Freq"]] <- position_data[["Freq"]]/sum(position_data[["Freq"]])
@@ -300,19 +295,20 @@ The mean absolute cleavage site misplacement (MAM) is \Sexpr{round(poster_data[[
     
     
     \begin{block}{Results of comparision}
+    \small{
 <<echo = FALSE,message=FALSE,results='asis'>>=
 load("benchmark_dat.RData")
 benchmark_dat <- benchmark_dat[, c("AUC", "H", "Gini", "positions")]
 colnames(benchmark_dat) <- c("AUC", "H-measure", "Gini index", "MAM")
 xtable(benchmark_dat, align = c("r", rep("c", 4)), digits = 4)
 @ 
-    
+    } 
     MAM - mean absolute cleavage site misplacement.
     \end{block}
     \vfill
      
-    \begin{block}{Summary}
-      Hidden semi-Markov models can be used to accurately predict the presence of secretory signal peptides effectively extracting information from very data sets.
+    \begin{block}{Conclusions}
+      Hidden semi-Markov models can be used to accurately predict the presence of secretory signal peptides effectively extracting information from very data sets. Prediction of cleavage site position still requires refinement.
     \end{block}
     \vfill 
     
@@ -320,7 +316,7 @@ xtable(benchmark_dat, align = c("r", rep("c", 4)), digits = 4)
         \footnotesize{
       signal.hsmm web server: 
       
-      \url{http://michbur.shinyapps.io/signalhsmm/}$\begin{array}{l}
+      \url{www.smorfland.uni.wroc.pl/signalhsmm}$\begin{array}{l}
         \begin{figure}[ht]
         \centering
         \scalebox{0.3}{

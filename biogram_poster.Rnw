@@ -46,7 +46,7 @@
 \setbeamercolor*{itemize subsubitem}{fg=darkred}
 
 \newlength{\columnheight}
-\setlength{\columnheight}{90cm}
+\setlength{\columnheight}{93cm}
 \renewcommand{\thetable}{}
 \def\andname{,}
 \authornote{}
@@ -67,20 +67,21 @@ library(xtable)
 library(ggplot2)
 library(reshape2)
 library(biogram)
+library(grid)
 load("three_n_power.RData")
 
 poster_theme <- theme(plot.background=element_rect(fill = "transparent",
                                                    colour = "transparent"),
-                      axis.text.x = element_text(size=16), 
-                      axis.text.y = element_text(size=16),
-                      axis.title.x = element_text(size=19, vjust = -1), 
-                      axis.title.y = element_text(size=19, vjust = 1),
-                      strip.text = element_text(size=19),
-                      legend.text = element_text(size=16), 
-                      legend.title = element_text(size=19),
-                      plot.title = element_text(size=27),
+                      plot.margin = unit(c(1,1,1,1), "cm"),
+                      axis.text.x = element_text(size=17), 
+                      axis.text.y = element_text(size=17),
+                      axis.title.x = element_text(size=20, vjust = -1), 
+                      axis.title.y = element_text(size=20, vjust = 1),
+                      strip.text = element_text(size=20),
+                      legend.text = element_text(size=17), 
+                      legend.title = element_text(size=20),
+                      plot.title = element_text(size=28),
                       panel.background = element_rect(fill = "transparent",colour = "black"),
-                      #legend.direction="horizontal", legend.position = "bottom",
                       legend.background = element_rect(fill="NA"))
 @
 
@@ -90,7 +91,7 @@ poster_theme <- theme(plot.background=element_rect(fill = "transparent",
 *Piotr.Sobczyk@pwr.edu.pl}
 
 
-\institute{
+\institute{\small{
 
 \textsuperscript{1}Wroc\l{}aw University of Technology, Department of Mathematics, Poland
 
@@ -102,7 +103,7 @@ poster_theme <- theme(plot.background=element_rect(fill = "transparent",
 
 \textsuperscript{3}Dresden University of Technology, Institute of Medical Informatics and Biometry, Poland 
 
-}
+}}
 \title{\huge Quick Permutation Test: feature filtering of n-gram data}
 
 \begin{frame}
@@ -116,6 +117,8 @@ poster_theme <- theme(plot.background=element_rect(fill = "transparent",
         
     \begin{block}{Introduction}
       N-grams (k-tuples) are vectors of n characters derived from input sequence(s). They may form continuous sub-sequences or be discontinuous. Another important n-gram parameter is its position. Instead of just counting n-grams, one may want to count how many n-grams occur at a given position in multiple (e.g. related) sequences.
+
+Originally developed for natural language processing, n-grams are also used in proteomics, genomics and transcriptomics.
 
 \small{
        \begin{columns}[c] % the "c" option specifies center vertical alignment
@@ -166,9 +169,6 @@ colnames(unis) <- substr(sub("X", "P", colnames(unis)), 0, 4)
 print(xtable(unis, caption = "A fraction of possible unigrams with position information.", digits = 0), include.rownames = FALSE)
 @
 }    
-Originally developed for natural language processing, n-grams are also used in proteomics, genomics and transcriptomics.
-
-
     \end{block}
     
     \vfill
@@ -203,6 +203,7 @@ ggplot(dat, aes(x = n, y = n_max, fill = L, col = L)) +
   geom_line(linetype="dotted", size=1.5) + 
   geom_point(size=7, shape=21) +
   scale_x_continuous(breaks = 0L:6) +
+  scale_y_continuous(expression(n["max"])) +
   poster_theme
 
 @
@@ -417,7 +418,7 @@ p <- ggplot(fs, aes(x = ngram, y = sig, fill = power)) +
                         high = "#00CC00", low =  "#CCFFCC") +
   geom_point(aes(x = ngram, y = sig, size = value), range = c(5, 12)) +
   scale_size_continuous("False significant \nfeature frequency") +
-  ylab("Signal strength") + xlab("N-gram size") +
+  ylab("Signal strength") + xlab("n-gram size") +
   poster_theme
 p +   geom_abline(intercept=1.5, slope=0.0, color="#666666", size=5) 
 

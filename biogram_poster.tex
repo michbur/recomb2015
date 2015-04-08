@@ -95,7 +95,7 @@
 \setbeamercolor*{itemize subsubitem}{fg=darkred}
 
 \newlength{\columnheight}
-\setlength{\columnheight}{90cm}
+\setlength{\columnheight}{93cm}
 \renewcommand{\thetable}{}
 \def\andname{,}
 \authornote{}
@@ -119,7 +119,7 @@
 *Piotr.Sobczyk@pwr.edu.pl}
 
 
-\institute{
+\institute{\small{
 
 \textsuperscript{1}Wroc\l{}aw University of Technology, Department of Mathematics, Poland
 
@@ -131,7 +131,7 @@
 
 \textsuperscript{3}Dresden University of Technology, Institute of Medical Informatics and Biometry, Poland 
 
-}
+}}
 \title{\huge Quick Permutation Test: feature filtering of n-gram data}
 
 \begin{frame}
@@ -146,20 +146,22 @@
     \begin{block}{Introduction}
       N-grams (k-tuples) are vectors of n characters derived from input sequence(s). They may form continuous sub-sequences or be discontinuous. Another important n-gram parameter is its position. Instead of just counting n-grams, one may want to count how many n-grams occur at a given position in multiple (e.g. related) sequences.
 
+Originally developed for natural language processing, n-grams are also used in proteomics, genomics and transcriptomics.
+
 \small{
        \begin{columns}[c] % the "c" option specifies center vertical alignment
     \column{.5\textwidth} 
 % latex table generated in R 3.1.3 by xtable 1.7-4 package
-% Wed Apr  8 12:15:47 2015
+% Wed Apr  8 13:52:50 2015
 \begin{table}[ht]
 \centering
 \begin{tabular}{rrrrrrr}
   \hline
  & P1 & P2 & P3 & P4 & P5 & P6 \\ 
   \hline
-S1 & 2 & 2 & 1 & 3 & 3 & 4 \\ 
-  S2 & 2 & 1 & 1 & 2 & 4 & 4 \\ 
-  S3 & 4 & 2 & 2 & 4 & 1 & 2 \\ 
+S1 & 2 & 2 & 3 & 2 & 1 & 4 \\ 
+  S2 & 3 & 4 & 4 & 2 & 1 & 3 \\ 
+  S3 & 1 & 3 & 3 & 4 & 2 & 1 \\ 
    \hline
 \end{tabular}
 \caption{Sample sequences.} 
@@ -172,16 +174,16 @@ S1 & 2 & 2 & 1 & 3 & 3 & 4 \\
     \column{.5\textwidth}
     
 % latex table generated in R 3.1.3 by xtable 1.7-4 package
-% Wed Apr  8 12:15:47 2015
+% Wed Apr  8 13:52:51 2015
 \begin{table}[ht]
 \centering
 \begin{tabular}{rrrr}
   \hline
 1 & 2 & 3 & 4 \\ 
   \hline
-1 & 2 & 2 & 1 \\ 
-  2 & 2 & 0 & 2 \\ 
-  1 & 3 & 0 & 2 \\ 
+1 & 3 & 1 & 1 \\ 
+  1 & 1 & 2 & 2 \\ 
+  2 & 1 & 2 & 1 \\ 
    \hline
 \end{tabular}
 \caption{Unigram counts.} 
@@ -191,25 +193,22 @@ S1 & 2 & 2 & 1 & 3 & 3 & 4 \\
     \end{columns}
 
 % latex table generated in R 3.1.3 by xtable 1.7-4 package
-% Wed Apr  8 12:15:47 2015
+% Wed Apr  8 13:52:51 2015
 \begin{table}[ht]
 \centering
 \begin{tabular}{rrrrrrrrrrrrr}
   \hline
 P1\_1 & P2\_1 & P3\_1 & P4\_1 & P5\_1 & P6\_1 & P1\_2 & P2\_2 & P3\_2 & P4\_2 & P5\_2 & P6\_2 & P1\_3 \\ 
   \hline
-0 & 0 & 1 & 0 & 0 & 0 & 1 & 1 & 0 & 0 & 0 & 0 & 0 \\ 
-  0 & 1 & 1 & 0 & 0 & 0 & 1 & 0 & 0 & 1 & 0 & 0 & 0 \\ 
-  0 & 0 & 0 & 0 & 1 & 0 & 0 & 1 & 1 & 0 & 0 & 1 & 0 \\ 
+0 & 0 & 0 & 0 & 1 & 0 & 1 & 1 & 0 & 1 & 0 & 0 & 0 \\ 
+  0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 1 \\ 
+  1 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 1 & 0 & 0 \\ 
    \hline
 \end{tabular}
 \caption{A fraction of possible unigrams with position information.} 
 \end{table}
 
 }    
-Originally developed for natural language processing, n-grams are also used in proteomics, genomics and transcriptomics.
-
-
     \end{block}
     
     \vfill
@@ -368,7 +367,7 @@ as a way of deciding which contingency tables are more extreme.
 }
 \column{.5\textwidth}
 % latex table generated in R 3.1.3 by xtable 1.7-4 package
-% Wed Apr  8 12:15:48 2015
+% Wed Apr  8 13:52:51 2015
 \begin{table}[ht]
 \centering
 \begin{tabular}{|c|ccc|}
