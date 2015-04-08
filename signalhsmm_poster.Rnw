@@ -238,14 +238,14 @@ print(tabAminokwasow(aa5, c("Positively charged", "Nonpolar and aliphatic",
     
     \begin{block}{Validation results}
     \begin{figure}
-    \scalebox{0.85}{    
+    \scalebox{0.87}{    
 <<echo = FALSE,message=FALSE,fig.width=14,fig.align='center'>>=
 metrics <- t(poster_data[["metrics"]][c("AUC", "H", "Gini", "Recall", "Spec", "Precision"), ])
 melted_metrics <- do.call(rbind, lapply(1L:ncol(metrics), function(i)
        data.frame(metric = rep(colnames(metrics)[i], nrow(metrics)),
                   value = unlist(metrics[, i]))))
 melted_metrics[["metric"]] <- as.factor(melted_metrics[["metric"]])
-levels(melted_metrics[["metric"]]) <- c("AUC", "H-measure", "Gini", "Recall", "Specificity", "Precision")
+levels(melted_metrics[["metric"]]) <- c("AUC", "H-measure", "Gini index", "Recall", "Specificity", "Precision")
 ggplot(melted_metrics, aes(x = metric, y = value)) + 
   geom_boxplot() +
   scale_x_discrete(name = "Performance measure") + 
@@ -258,7 +258,7 @@ ggplot(melted_metrics, aes(x = metric, y = value)) +
 The mean AUC obtained in the cross-validation is  \Sexpr{round(mean(unlist(poster_data[["metrics"]]["AUC", ])), 4)}
     
     \begin{figure}
-    \scalebox{0.85}{    
+    \scalebox{0.86}{    
 <<echo = FALSE,message=FALSE,fig.width=14,fig.align='center'>>=
 position_data <- poster_data[["position_table"]]
 position_data[["Freq"]] <- position_data[["Freq"]]/sum(position_data[["Freq"]])
@@ -300,12 +300,17 @@ The mean absolute cleavage site misplacement is \Sexpr{round(poster_data[["mean"
     
     
     \begin{block}{Comparision of various software}
-    STH
+<<echo = FALSE,message=FALSE,results='asis'>>=
+load("benchmark_dat.RData")
+benchmark_dat <- benchmark_dat[, c("AUC", "H", "Gini", "positions")]
+colnames(benchmark_dat) <- c("AUC", "H-measure", "Gini index", "MAPD")
+xtable(benchmark_dat, align = c("r", rep("c", 4)))
+@ 
     \end{block}
     \vfill
      
     \begin{block}{Summary}
-      Hidden semi-Markov models can be used to accurately predict the presence of secretory signal peptides effectively extracting information from very small data sets.
+      Hidden semi-Markov models can be used to accurately predict the presence of secretory signal peptides effectively extracting information from very data sets.
     \end{block}
     \vfill 
     
