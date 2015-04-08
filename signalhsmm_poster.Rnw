@@ -279,7 +279,7 @@ ggplot(position_data_plot, aes(x = Var1, y = Freq)) +
     }
     \end{figure}
     
-The mean absolute cleavage site misplacement is \Sexpr{round(poster_data[["mean"]], 4)}.
+The mean absolute cleavage site misplacement (MAPD) is \Sexpr{round(poster_data[["mean"]], 4)}.
     
     \end{block}
     \vfill
