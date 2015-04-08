@@ -258,7 +258,7 @@ ggplot(melted_metrics, aes(x = metric, y = value)) +
 The mean AUC obtained in the cross-validation is  \Sexpr{round(mean(unlist(poster_data[["metrics"]]["AUC", ])), 4)}
     
     \begin{figure}
-    \scalebox{0.86}{    
+    \scalebox{0.85}{    
 <<echo = FALSE,message=FALSE,fig.width=14,fig.align='center'>>=
 position_data <- poster_data[["position_table"]]
 position_data[["Freq"]] <- position_data[["Freq"]]/sum(position_data[["Freq"]])
@@ -299,13 +299,15 @@ The mean absolute cleavage site misplacement (MAM) is \Sexpr{round(poster_data[[
     
     
     
-    \begin{block}{Comparision of various software}
+    \begin{block}{Results of comparision}
 <<echo = FALSE,message=FALSE,results='asis'>>=
 load("benchmark_dat.RData")
 benchmark_dat <- benchmark_dat[, c("AUC", "H", "Gini", "positions")]
 colnames(benchmark_dat) <- c("AUC", "H-measure", "Gini index", "MAM")
 xtable(benchmark_dat, align = c("r", rep("c", 4)))
 @ 
+    
+    MAM - mean absolute cleavage site misplacement.
     \end{block}
     \vfill
      
@@ -314,7 +316,7 @@ xtable(benchmark_dat, align = c("r", rep("c", 4)))
     \end{block}
     \vfill 
     
-        \begin{block}{Avaibility}
+        \begin{block}{Availability and funding}
         \footnotesize{
       signal.hsmm web server: 
       
@@ -327,11 +329,9 @@ xtable(benchmark_dat, align = c("r", rep("c", 4)))
         \end{figure}
       \end{array}
       $
-      
-      signal.hsmm R package: 
-      
-      \url{http://cran.r-project.org/web/packages/signal.hsmm/}
         }
+        
+        This research was partially funded by KNOW Consortium.
     \end{block}
     \vfill 
      
