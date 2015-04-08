@@ -304,7 +304,7 @@ The mean absolute cleavage site misplacement (MAM) is \Sexpr{round(poster_data[[
 load("benchmark_dat.RData")
 benchmark_dat <- benchmark_dat[, c("AUC", "H", "Gini", "positions")]
 colnames(benchmark_dat) <- c("AUC", "H-measure", "Gini index", "MAM")
-xtable(benchmark_dat, align = c("r", rep("c", 4)))
+xtable(benchmark_dat, align = c("r", rep("c", 4)), digits = 4)
 @ 
     
     MAM - mean absolute cleavage site misplacement.
