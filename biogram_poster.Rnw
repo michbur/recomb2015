@@ -363,6 +363,18 @@ xtable(tab, align = c("|c|ccc|"), )
 % \end{block}
 %     \vfill
 
+\begin{block}{Simulation scheme}
+\begin{enumerate}[1.]
+\item Random 4000 sequences (20 nucleotides each). The half of the sequences has label 0.
+\item Choose a single position between 3 and 18 (to avoid border cases).
+\item Resample nucleotides at chosen position. The dominant nucletoide has probabilitiy of occurence $p_d = 0.25$. Other nucleotides have probability of occurence $p_o = (1 - p_d)/3  $. 
+\item Perform QuiPT (Information Gain) and choose significant features (with p-value $< 0.001$).
+\item Iterate steps 1-4 over other values of $p_d$ - 0.38, 0.51, 0.65, 0.78, 0.91.
+\item Repeat steps 1-5 200 times.
+\end{enumerate}
+    \end{block}
+    \vfill
+
 \begin{block}{Power and False discoveries}
     \centering
 \scalebox{1}{  

@@ -150,16 +150,16 @@
        \begin{columns}[c] % the "c" option specifies center vertical alignment
     \column{.5\textwidth} 
 % latex table generated in R 3.1.3 by xtable 1.7-4 package
-% Wed Apr  8 10:03:57 2015
+% Wed Apr  8 10:07:56 2015
 \begin{table}[ht]
 \centering
 \begin{tabular}{rrrrrrr}
   \hline
  & P1 & P2 & P3 & P4 & P5 & P6 \\ 
   \hline
-S1 & 2 & 1 & 3 & 3 & 2 & 4 \\ 
-  S2 & 1 & 1 & 1 & 2 & 4 & 3 \\ 
-  S3 & 2 & 2 & 1 & 4 & 2 & 1 \\ 
+S1 & 3 & 2 & 3 & 3 & 3 & 1 \\ 
+  S2 & 1 & 4 & 3 & 4 & 1 & 1 \\ 
+  S3 & 1 & 1 & 1 & 1 & 2 & 1 \\ 
    \hline
 \end{tabular}
 \caption{Sample sequences.} 
@@ -172,16 +172,16 @@ S1 & 2 & 1 & 3 & 3 & 2 & 4 \\
     \column{.5\textwidth}
     
 % latex table generated in R 3.1.3 by xtable 1.7-4 package
-% Wed Apr  8 10:03:57 2015
+% Wed Apr  8 10:07:56 2015
 \begin{table}[ht]
 \centering
 \begin{tabular}{rrrr}
   \hline
 1 & 2 & 3 & 4 \\ 
   \hline
-1 & 2 & 2 & 1 \\ 
-  3 & 1 & 1 & 1 \\ 
-  2 & 3 & 0 & 1 \\ 
+1 & 1 & 4 & 0 \\ 
+  3 & 0 & 1 & 2 \\ 
+  5 & 1 & 0 & 0 \\ 
    \hline
 \end{tabular}
 \caption{Unigram counts.} 
@@ -191,16 +191,16 @@ S1 & 2 & 1 & 3 & 3 & 2 & 4 \\
     \end{columns}
 
 % latex table generated in R 3.1.3 by xtable 1.7-4 package
-% Wed Apr  8 10:03:57 2015
+% Wed Apr  8 10:07:56 2015
 \begin{table}[ht]
 \centering
 \begin{tabular}{rrrrrrrrrrrrr}
   \hline
 P1\_1 & P2\_1 & P3\_1 & P4\_1 & P5\_1 & P6\_1 & P1\_2 & P2\_2 & P3\_2 & P4\_2 & P5\_2 & P6\_2 & P1\_3 \\ 
   \hline
-0 & 1 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 1 & 0 & 0 \\ 
-  1 & 1 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 \\ 
-  0 & 0 & 1 & 0 & 0 & 1 & 1 & 1 & 0 & 0 & 1 & 0 & 0 \\ 
+0 & 0 & 0 & 0 & 0 & 1 & 0 & 1 & 0 & 0 & 0 & 0 & 1 \\ 
+  1 & 0 & 0 & 0 & 1 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ 
+  1 & 1 & 1 & 1 & 0 & 1 & 0 & 0 & 0 & 0 & 1 & 0 & 0 \\ 
    \hline
 \end{tabular}
 \caption{A fraction of possible unigrams with position information.} 
@@ -368,7 +368,7 @@ as a way of deciding which contingency tables are more extreme.
 }
 \column{.5\textwidth}
 % latex table generated in R 3.1.3 by xtable 1.7-4 package
-% Wed Apr  8 10:03:58 2015
+% Wed Apr  8 10:07:57 2015
 \begin{table}[ht]
 \centering
 \begin{tabular}{|c|ccc|}
@@ -413,6 +413,18 @@ as a way of deciding which contingency tables are more extreme.
 % }
 % \end{block}
 %     \vfill
+
+\begin{block}{Simulation scheme}
+\begin{enumerate}[1.]
+\item Random 4000 sequences (20 nucleotides each). The half of the sequences has label 0.
+\item Choose a single position between 3 and 18 (to avoid border cases).
+\item Resample nucleotides at chosen position. The dominant nucletoide has probabilitiy of occurence $p_d = 0.25$. Other nucleotides have probability of occurence $p_o = (1 - p_d)/3  $. 
+\item Perform QuiPT (Information Gain) and choose significant features (with p-value $< 0.001$).
+\item Iterate steps 1-4 over other values of $p_d$ - 0.38, 0.51, 0.65, 0.78, 0.91.
+\item Repeat steps 1-5 200 times.
+\end{enumerate}
+    \end{block}
+    \vfill
 
 \begin{block}{Power and False discoveries}
     \centering
