@@ -279,7 +279,7 @@ ggplot(position_data_plot, aes(x = Var1, y = Freq)) +
     }
     \end{figure}
     
-The mean absolute cleavage site misplacement (MAPD) is \Sexpr{round(poster_data[["mean"]], 4)}.
+The mean absolute cleavage site misplacement (MAM) is \Sexpr{round(poster_data[["mean"]], 4)}.
     
     \end{block}
     \vfill
@@ -303,7 +303,7 @@ The mean absolute cleavage site misplacement (MAPD) is \Sexpr{round(poster_data[
 <<echo = FALSE,message=FALSE,results='asis'>>=
 load("benchmark_dat.RData")
 benchmark_dat <- benchmark_dat[, c("AUC", "H", "Gini", "positions")]
-colnames(benchmark_dat) <- c("AUC", "H-measure", "Gini index", "MAPD")
+colnames(benchmark_dat) <- c("AUC", "H-measure", "Gini index", "MAM")
 xtable(benchmark_dat, align = c("r", rep("c", 4)))
 @ 
     \end{block}
