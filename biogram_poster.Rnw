@@ -234,10 +234,10 @@ Permutation tests are computationally expensive (especially precise estimation o
     \vfill
     
     
-    \begin{block}{QuiPT algorithm}
-      If probability that target equals 1 is $p$ and probability that feature equals
-1 is $q$ and feature and target are independent then each of them has the 
-following probabilities 
+\begin{block}{QuiPT idea}
+
+If probability that target equals 1 is $p$ and probability that feature equals
+1 is $q$ then we can compute the probability of given observations, eg.
 
 \begin{center}
 \scalebox{0.85}{
@@ -246,36 +246,58 @@ $P(Target, Feature) = (1,1)) = p \cdot q$
 \end{center}
 
 \\
+% 
+% \begin{center}
+% \scalebox{0.85}{
+% $P(Target, Feature) = (1,0)) = p \cdot (1-q)$
+% }
+% \end{center}
+% 
+% \\
+% 
+% \begin{center}
+% \scalebox{0.85}{
+% $P(Target, Feature) = (0,1)) = (1-p) \cdot q$
+% }
+% \end{center}
+% 
+% \\
+% 
+% \begin{center}
+% \scalebox{0.85}{
+% $P(Target, Feature) = (0,0)) = (1-p) \cdot (1-q)$
+% }
+% \end{center}
+% 
+% \\
 
-\begin{center}
-\scalebox{0.85}{
-$P(Target, Feature) = (1,0)) = p \cdot (1-q)$
-}
-\end{center}
-
-\\
-
-\begin{center}
-\scalebox{0.85}{
-$P(Target, Feature) = (0,1)) = (1-p) \cdot q$
-}
-\end{center}
-
-\\
-
-\begin{center}
-\scalebox{0.85}{
-$P(Target, Feature) = (0,0)) = (1-p) \cdot (1-q)$
-}
-\end{center}
-
-\\
-
-Therefore another view is that we get a contingency table that needs to 
-be tested for independance.
-  \end{block}
-  \vfill
+Therefore another view at permutation test is that we get a contingency table,
+which needs to be tested for independance.
   
+\end{block}
+\vfill
+
+\begin{block}{Independence test}
+    
+\begin{split*}
+  F(n_{1,1}, n_{1,0}, n_{0,1}, n_{0,0}) = 
+  {n \choose n_{1,1}} (p\cdot q)^{n_{1,1}} 
+  { n - n_{1,1} \choose n_{1,0}} (p\cdot (1-q))^{n_{1,0}} \\
+  {n - n_{1,1} - n_{1,0} \choose n_{0,1}} ((1-p)\cdot q)^{n_{0,1}} 
+  {n - n_{1,1} - n_{1,0} -n_{0,1} \choose n_{0,0}} ((1-p)\cdot (1-q))^{n_{0,0}}$$
+\end{split}
+
+
+This distribution comes with two constraints:
+$n_{1,\cdot} = n_{1,1} + n_{1,0}$ and
+$n_{\cdot, 1} = n_{1,1} + n_{0,1}$.
+Thus, conditioning on $n_{1,1}$, we get hypergeometric distribution.
+
+This is in fact exact two-sided Fisher's test. Information Gain is used here 
+as a way of deciding which contingency tables are more extreme.
+
+\end{block}
+\vfill 
     
     }
         \end{minipage}
@@ -291,28 +313,23 @@ be tested for independance.
           \parbox[t][\columnheight]{\textwidth}
             {
      
-    \begin{block}{Independence test}
-    
 
-\begin{split*}
-F(n_{1,1}, n_{1,0}, n_{0,1}, n_{0,0}) = 
-{n \choose n_{1,1}} (p\cdot q)^{n_{1,1}} 
-{ n - n_{1,1} \choose n_{1,0}} (p\cdot (1-q))^{n_{1,0}} \\
-{n - n_{1,1} - n_{1,0} \choose n_{0,1}} ((1-p)\cdot q)^{n_{0,1}} 
-{n - n_{1,1} - n_{1,0} -n_{0,1} \choose n_{0,0}} ((1-p)\cdot (1-q))^{n_{0,0}}$$
-\end{split}
+ 
+\begin{block}{Computational cost}
 
+The cost of performing QuiPT is equal to computing Information Gain and 
+probability of occurence for $n_{1,1} + n_{0,1}$ contingency tables.
 
-This distribution comes with two constraints:
-$n_{1,\cdot} = n_{1,1} + n_{1,0}$ and
-$n_{\cdot, 1} = n_{1,1} + n_{0,1}$.
-Thus, conditioning on $n_{1,1}$, we get hypergeometric distribution.
+Suppose we consider 6-grams build on sequences of length 25 build of four 
+characters. Then there are around 100,000 n-grams, features to test. 
+This means that for Benjamini-Hochberg procedure, we need to calculate 
+p-values with accuracy of $0.05 \times 10^{-5}$. This requires at least 
+2 million permutations. Each permutation, apart from reshuffling labels, 
+requires computation of IG. Since n-gram features are very sparse vectors,
+QuiPT needs to evaluate only few contingency tables.
 
-This is in fact exact two-sided Fisher's test. Information Gain is used here 
-as a way of deciding which contingency tables are more extreme.
-    \end{block}
-    \vfill 
-     
+\end{block}
+\vfill 
     
     \begin{block}{Validation procedure}
     
