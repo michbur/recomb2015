@@ -1,4 +1,4 @@
-@Article{fang_2011,
+@Article{fang2011,
 AUTHOR = {Fang, Yu-Ching and Lai, Po-Ting and Dai, Hong-Jie and Hsu, Wen-Lian},
 TITLE = {MeInfoText 2.0: gene methylation and cancer relation extraction from biomedical literature},
 JOURNAL = {BMC Bioinformatics},
@@ -11,4 +11,34 @@ DOI = {10.1186/1471-2105-12-471},
 PubMedID = {22168213},
 ISSN = {1471-2105},
 ABSTRACT = {BACKGROUND:DNA methylation is regarded as a potential biomarker in the diagnosis and treatment of cancer. The relations between aberrant gene methylation and cancer development have been identified by a number of recent scientific studies. In a previous work, we used co-occurrences to mine those associations and compiled the MeInfoText 1.0 database. To reduce the amount of manual curation and improve the accuracy of relation extraction, we have now developed MeInfoText 2.0, which uses a machine learning-based approach to extract gene methylation-cancer relations.DESCRIPTION:Two maximum entropy models are trained to predict if aberrant gene methylation is related to any type of cancer mentioned in the literature. After evaluation based on 10-fold cross-validation, the average precision/recall rates of the two models are 94.7/90.1 and 91.8/90% respectively. MeInfoText 2.0 provides the gene methylation profiles of different types of human cancer. The extracted relations with maximum probability, evidence sentences, and specific gene information are also retrievable. The database is available at http://bws.iis.sinica.edu.tw:8081/MeInfoText2/ webcite.CONCLUSION:The previous version, MeInfoText, was developed by using association rules, whereas MeInfoText 2.0 is based on a new framework that combines machine learning, dictionary lookup and pattern matching for epigenetics information extraction. The results of experiments show that MeInfoText 2.0 outperforms existing tools in many respects. To the best of our knowledge, this is the first study that uses a hybrid approach to extract gene methylation-cancer relations. It is also the first attempt to develop a gene methylation and cancer relation corpus.},
+}
+
+@article{wang2014,
+    author = {Wang, Ying AND Liu, Lin AND Chen, Lina AND Chen, Ting AND Sun, Fengzhu},
+    journal = {PLoS ONE},
+    publisher = {Public Library of Science},
+    title = {Comparison of Metatranscriptomic Samples Based on <italic>k-</italic>Tuple Frequencies},
+    year = {2014},
+    month = {01},
+    volume = {9},
+    url = {http://dx.doi.org/10.1371%2Fjournal.pone.0084348},
+    pages = {e84348},
+    abstract = {<sec><title>Background</title><p>The comparison of samples, or beta diversity, is one of the essential problems in ecological studies. Next generation sequencing (NGS) technologies make it possible to obtain large amounts of metagenomic and metatranscriptomic short read sequences across many microbial communities. De novo assembly of the short reads can be especially challenging because the number of genomes and their sequences are generally unknown and the coverage of each genome can be very low, where the traditional alignment-based sequence comparison methods cannot be used. Alignment-free approaches based on <italic>k</italic>-tuple frequencies, on the other hand, have yielded promising results for the comparison of metagenomic samples. However, it is not known if these approaches can be used for the comparison of metatranscriptome datasets and which dissimilarity measures perform the best.</p></sec><sec><title>Results</title><p>We applied several beta diversity measures based on <italic>k</italic>-tuple frequencies to real metatranscriptomic datasets from pyrosequencing 454 and Illumina sequencing platforms to evaluate their effectiveness for the clustering of metatranscriptomic samples, including three <inline-formula><inline-graphic xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="info:doi/10.1371/journal.pone.0084348.e001" xlink:type="simple"/></inline-formula> dissimilarity measures, one dissimilarity measure in CVTree, one relative entropy based measure <italic>S2</italic> and three classical <inline-formula><inline-graphic xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="info:doi/10.1371/journal.pone.0084348.e002" xlink:type="simple"/></inline-formula> distances. Results showed that the measure <inline-formula><inline-graphic xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="info:doi/10.1371/journal.pone.0084348.e003" xlink:type="simple"/></inline-formula> can achieve superior performance on clustering metatranscriptomic samples into different groups under different sequencing depths for both 454 and Illumina datasets, recovering environmental gradients affecting microbial samples, classifying coexisting metagenomic and metatranscriptomic datasets, and being robust to sequencing errors. We also investigated the effects of tuple size and order of the background Markov model. A software pipeline to implement all the steps of analysis is built and is available at <ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="uri" xlink:href="http://code.google.com/p/d2-tools/" xlink:type="simple">http://code.google.com/p/d2-tools/</ext-link>.</p></sec><sec><title>Conclusions</title><p>The <italic>k</italic>-tuple based sequence signature measures can effectively reveal major groups and gradient variation among metatranscriptomic samples from NGS reads. The <inline-formula><inline-graphic xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="info:doi/10.1371/journal.pone.0084348.e004" xlink:type="simple"/></inline-formula> dissimilarity measure performs well in all application scenarios and its performance is robust with respect to tuple size and order of the Markov model.</p></sec>},
+    number = {1},
+    doi = {10.1371/journal.pone.0084348}
+}        
+
+
+@article{guo2014,
+author = {Guo, Shou-Hui and Deng, En-Ze and Xu, Li-Qin and Ding, Hui and Lin, Hao and Chen, Wei and Chou, Kuo-Chen}, 
+title = {iNuc-PseKNC: a sequence-based predictor for predicting nucleosome positioning in genomes with pseudo k-tuple nucleotide composition},
+volume = {30}, 
+number = {11}, 
+pages = {1522-1529}, 
+year = {2014}, 
+doi = {10.1093/bioinformatics/btu083}, 
+abstract ={Motivation: Nucleosome positioning participates in many cellular activities and plays significant roles in regulating cellular processes. With the avalanche of genome sequences generated in the post-genomic age, it is highly desired to develop automated methods for rapidly and effectively identifying nucleosome positioning. Although some computational methods were proposed, most of them were species specific and neglected the intrinsic local structural properties that might play important roles in determining the nucleosome positioning on a DNA sequence.Results: Here a predictor called ‘iNuc-PseKNC’ was developed for predicting nucleosome positioning in Homo sapiens, Caenorhabditis elegans and Drosophila melanogaster genomes, respectively. In the new predictor, the samples of DNA sequences were formulated by a novel feature-vector called ‘pseudo k-tuple nucleotide composition’, into which six DNA local structural properties were incorporated. It was observed by the rigorous cross-validation tests on the three stringent benchmark datasets that the overall success rates achieved by iNuc-PseKNC in predicting the nucleosome positioning of the aforementioned three genomes were 86.27%, 86.90% and 79.97%, respectively. Meanwhile, the results obtained by iNuc-PseKNC on various benchmark datasets used by the previous investigators for different genomes also indicated that the current predictor remarkably outperformed its counterparts.Availability: A user-friendly web-server, iNuc-PseKNC is freely accessible at http://lin.uestc.edu.cn/server/iNuc-PseKNC.Contact: hlin@uestc.edu.cn, wchen@gordonlifescience.org, kcchou@gordonlifescience.orgSupplementary information: Supplementary data are available at Bioinformatics online.}, 
+URL = {http://bioinformatics.oxfordjournals.org/content/30/11/1522.abstract}, 
+eprint = {http://bioinformatics.oxfordjournals.org/content/30/11/1522.full.pdf+html}, 
+journal = {Bioinformatics} 
 }
