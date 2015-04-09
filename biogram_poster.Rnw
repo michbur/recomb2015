@@ -328,6 +328,7 @@ p-values with accuracy of $0.05 \times 10^{-5}$. This requires at least
 requires computation of IG. Since n-gram features are very sparse vectors,
 QuiPT needs to evaluate only few contingency tables.
 
+The relative difference in speed between QuiPT and normal permutation tests depends on several factors, as number of permutations and input data. For example, for simulation scheme presented below, QuiPT was on average 93 times faster than normal permutation test.
 \end{block}
 \vfill 
     

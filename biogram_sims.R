@@ -23,6 +23,8 @@ three_n_power <- pblapply(1L:200, function(dummy_variable) {
       seqs_ngrams <- count_ngrams(seqs, ngram_size, 1L:4, pos = TRUE)
       #only 1000 repetitions for monte carlo
       ig_test1 <- test_features(targets, seqs_ngrams)
+      # unigrams, QuiPT 41.070 s
+      # unigrams, without QuiPT 3847.926 s
       signif_ngrams <- cut(ig_test1, breaks = c(0, 1e-02, 1))[[1]]
       #[1] - significant n-grams found on position chosen_nuc
       #[2] - total number of significant n-grams
