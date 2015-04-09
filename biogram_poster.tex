@@ -144,7 +144,8 @@
     
         
     \begin{block}{Introduction}
-      N-grams (k-tuples) are vectors of n characters derived from input sequence(s). They may form continuous sub-sequences or be discontinuous. Another important n-gram parameter is its position. Instead of just counting n-grams, one may want to count how many n-grams occur at a given position in multiple (e.g. related) sequences.
+N-grams (k-tuples) are vectors of n characters derived from input sequence(s). They may form continuous sub-sequences or be discontinuous. 
+Important n-gram parameter is its position. Instead of just counting n-grams, one may want to count how many n-grams occur at a given position in multiple (e.g. related) sequences.
 
 Originally developed for natural language processing, n-grams are also used in genomics~\citep{fang2011}, transcriptomics~\citep{wang2014} and proteomics~\citep{guo2014}.
 
@@ -152,16 +153,16 @@ Originally developed for natural language processing, n-grams are also used in g
        \begin{columns}[c] % the "c" option specifies center vertical alignment
     \column{.5\textwidth} 
 % latex table generated in R 3.1.3 by xtable 1.7-4 package
-% Thu Apr  9 21:28:45 2015
+% Thu Apr  9 21:48:29 2015
 \begin{table}[ht]
 \centering
 \begin{tabular}{rrrrrrr}
   \hline
  & P1 & P2 & P3 & P4 & P5 & P6 \\ 
   \hline
-S1 & 1 & 1 & 4 & 4 & 4 & 2 \\ 
-  S2 & 2 & 1 & 1 & 1 & 1 & 3 \\ 
-  S3 & 4 & 4 & 3 & 2 & 2 & 3 \\ 
+S1 & 3 & 4 & 2 & 2 & 1 & 1 \\ 
+  S2 & 2 & 2 & 2 & 1 & 4 & 1 \\ 
+  S3 & 3 & 1 & 4 & 2 & 4 & 3 \\ 
    \hline
 \end{tabular}
 \caption{Sample sequences.} 
@@ -174,16 +175,16 @@ S1 & 1 & 1 & 4 & 4 & 4 & 2 \\
     \column{.5\textwidth}
     
 % latex table generated in R 3.1.3 by xtable 1.7-4 package
-% Thu Apr  9 21:28:45 2015
+% Thu Apr  9 21:48:29 2015
 \begin{table}[ht]
 \centering
 \begin{tabular}{rrrr}
   \hline
 1 & 2 & 3 & 4 \\ 
   \hline
-2 & 1 & 0 & 3 \\ 
-  4 & 1 & 1 & 0 \\ 
-  0 & 2 & 2 & 2 \\ 
+2 & 2 & 1 & 1 \\ 
+  2 & 3 & 0 & 1 \\ 
+  1 & 1 & 2 & 2 \\ 
    \hline
 \end{tabular}
 \caption{Unigram counts.} 
@@ -193,16 +194,16 @@ S1 & 1 & 1 & 4 & 4 & 4 & 2 \\
     \end{columns}
 
 % latex table generated in R 3.1.3 by xtable 1.7-4 package
-% Thu Apr  9 21:28:45 2015
+% Thu Apr  9 21:48:29 2015
 \begin{table}[ht]
 \centering
 \begin{tabular}{rrrrrrrrrrrrr}
   \hline
 P1\_1 & P2\_1 & P3\_1 & P4\_1 & P5\_1 & P6\_1 & P1\_2 & P2\_2 & P3\_2 & P4\_2 & P5\_2 & P6\_2 & P1\_3 \\ 
   \hline
-1 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 \\ 
-  0 & 1 & 1 & 1 & 1 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 \\ 
-  0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 1 & 0 & 0 \\ 
+0 & 0 & 0 & 0 & 1 & 1 & 0 & 0 & 1 & 1 & 0 & 0 & 1 \\ 
+  0 & 0 & 0 & 1 & 0 & 1 & 1 & 1 & 1 & 0 & 0 & 0 & 0 \\ 
+  0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 1 \\ 
    \hline
 \end{tabular}
 \caption{A fraction of possible unigrams with position information.} 
@@ -215,7 +216,9 @@ P1\_1 & P2\_1 & P3\_1 & P4\_1 & P5\_1 & P6\_1 & P1\_2 & P2\_2 & P3\_2 & P4\_2 & 
     
     \begin{block}{Curse of dimensionality}
     
-Even when we limit ourselves to only continuous positioned n-grams, feature space growths rapidly with the number of elements in n-gram ($n$) and length of the sequence ($L$).    
+Even when we limit ourselves to only continuous positioned n-grams, build on $m$ possible
+characters, feature space growths rapidly with the number of elements in n-gram
+($n$) and length of the sequence ($L$).    
     
 Number of possible positioned n-grams: 
 
@@ -309,9 +312,11 @@ get a contingency table, which is to be tested for independance.
 Computing probability of such a table with two constraints, $n_{1,\cdot} = n_{1,1} + n_{1,0}$ and
 $n_{\cdot, 1} = n_{1,1} + n_{0,1}$, and 
 conditioning on $n_{1,1}$, leads to hypergeometric distribution.
+$n_{i,j}$ denotes number of observations for which 
+\scalebox{0.85}{$(Target, Feature) = (i,j)$}
 
-This is in fact exact two-sided Fisher's test. Information Gain is a way
-of deciding how strong is the evidence against independance.
+This is in fact exact two-sided Fisher's test~\citep{lehmann1986testing}. 
+Information Gain is a way of deciding how strong is the evidence against independance.
 
 \end{block}
 \vfill 
@@ -369,7 +374,7 @@ The relative difference in speed between QuiPT and normal permutation tests depe
 }
 \column{.5\textwidth}
 % latex table generated in R 3.1.3 by xtable 1.7-4 package
-% Thu Apr  9 21:28:49 2015
+% Thu Apr  9 21:48:30 2015
 \begin{table}[ht]
 \centering
 \begin{tabular}{|c|ccc|}
@@ -415,7 +420,7 @@ The relative difference in speed between QuiPT and normal permutation tests depe
 % \end{block}
 %     \vfill
 
-\begin{block}{Simulation scheme}
+\begin{block}{Simulation scheme - genomics}
 \begin{enumerate}[1.]
 \item Random 4000 sequences (20 nucleotides each). The half of the sequences has label 0.
 \item Choose a single position between 3 and 18 (to avoid border cases).

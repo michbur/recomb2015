@@ -116,7 +116,8 @@ poster_theme <- theme(plot.background=element_rect(fill = "transparent",
     
         
     \begin{block}{Introduction}
-      N-grams (k-tuples) are vectors of n characters derived from input sequence(s). They may form continuous sub-sequences or be discontinuous. Another important n-gram parameter is its position. Instead of just counting n-grams, one may want to count how many n-grams occur at a given position in multiple (e.g. related) sequences.
+N-grams (k-tuples) are vectors of n characters derived from input sequence(s). They may form continuous sub-sequences or be discontinuous. 
+Important n-gram parameter is its position. Instead of just counting n-grams, one may want to count how many n-grams occur at a given position in multiple (e.g. related) sequences.
 
 Originally developed for natural language processing, n-grams are also used in genomics~\citep{fang2011}, transcriptomics~\citep{wang2014} and proteomics~\citep{guo2014}.
 
@@ -175,7 +176,9 @@ print(xtable(unis, caption = "A fraction of possible unigrams with position info
     
     \begin{block}{Curse of dimensionality}
     
-Even when we limit ourselves to only continuous positioned n-grams, feature space growths rapidly with the number of elements in n-gram ($n$) and length of the sequence ($L$).    
+Even when we limit ourselves to only continuous positioned n-grams, build on $m$ possible
+characters, feature space growths rapidly with the number of elements in n-gram
+($n$) and length of the sequence ($L$).    
     
 Number of possible positioned n-grams: 
 
@@ -276,9 +279,11 @@ get a contingency table, which is to be tested for independance.
 Computing probability of such a table with two constraints, $n_{1,\cdot} = n_{1,1} + n_{1,0}$ and
 $n_{\cdot, 1} = n_{1,1} + n_{0,1}$, and 
 conditioning on $n_{1,1}$, leads to hypergeometric distribution.
+$n_{i,j}$ denotes number of observations for which 
+\scalebox{0.85}{$(Target, Feature) = (i,j)$}
 
-This is in fact exact two-sided Fisher's test. Information Gain is a way
-of deciding how strong is the evidence against independance.
+This is in fact exact two-sided Fisher's test~\citep{lehmann1986testing}. 
+Information Gain is a way of deciding how strong is the evidence against independance.
 
 \end{block}
 \vfill 
@@ -366,7 +371,7 @@ xtable(tab, align = c("|c|ccc|"), )
 % \end{block}
 %     \vfill
 
-\begin{block}{Simulation scheme}
+\begin{block}{Simulation scheme - genomics}
 \begin{enumerate}[1.]
 \item Random 4000 sequences (20 nucleotides each). The half of the sequences has label 0.
 \item Choose a single position between 3 and 18 (to avoid border cases).
@@ -412,7 +417,7 @@ fs <- data.frame(tfres(fs_mean),
                  no_sig = (length(three_n_power) - tfres(no_sig)[["value"]])/length(three_n_power),
                  power=tfres(power)$value)
 #making signal strength number from range [0,1]
-fs$sig <- as.factor((as.numeric(fs$sig)-1)/5) 
+#fs$sig <- as.factor((as.numeric(fs$sig)-1)/5) 
 
 p <- ggplot(fs, aes(x = ngram, y = sig, fill = power)) + 
   geom_tile() +
@@ -420,7 +425,7 @@ p <- ggplot(fs, aes(x = ngram, y = sig, fill = power)) +
                         high = "#00CC00", low =  "#CCFFCC") +
   geom_point(aes(x = ngram, y = sig, size = value), range = c(5, 12)) +
   scale_size_continuous("False significant \nfeature frequency") +
-  ylab("Signal strength") + xlab("n-gram size") +
+  ylab(expression(paste("Signal strength - ", p[d]))) + xlab("n-gram size") +
   poster_theme
 p +   geom_abline(intercept=1.5, slope=0.0, color="#666666", size=5) 
 
