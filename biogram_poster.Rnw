@@ -236,8 +236,7 @@ Permutation tests are computationally expensive (especially precise estimation o
     
 \begin{block}{QuiPT idea}
 
-If probability that target equals 1 is $p$ and probability that feature equals
-1 is $q$ then we can compute the probability of given observations, eg.
+In each permutation, for every observation, there are four possible results.
 
 \begin{center}
 \scalebox{0.85}{
@@ -246,55 +245,40 @@ $P(Target, Feature) = (1,1)) = p \cdot q$
 \end{center}
 
 \\
-% 
-% \begin{center}
-% \scalebox{0.85}{
-% $P(Target, Feature) = (1,0)) = p \cdot (1-q)$
-% }
-% \end{center}
-% 
-% \\
-% 
-% \begin{center}
-% \scalebox{0.85}{
-% $P(Target, Feature) = (0,1)) = (1-p) \cdot q$
-% }
-% \end{center}
-% 
-% \\
-% 
-% \begin{center}
-% \scalebox{0.85}{
-% $P(Target, Feature) = (0,0)) = (1-p) \cdot (1-q)$
-% }
-% \end{center}
-% 
-% \\
 
-Therefore another view at permutation test is that we get a contingency table,
-which needs to be tested for independance.
-  
-\end{block}
-\vfill
+\begin{center}
+\scalebox{0.85}{
+$P(Target, Feature) = (1,0)) = p \cdot (1-q)$
+}
+\end{center}
 
-\begin{block}{Independence test}
-    
-\begin{split*}
-  F(n_{1,1}, n_{1,0}, n_{0,1}, n_{0,0}) = 
-  {n \choose n_{1,1}} (p\cdot q)^{n_{1,1}} 
-  { n - n_{1,1} \choose n_{1,0}} (p\cdot (1-q))^{n_{1,0}} \\
-  {n - n_{1,1} - n_{1,0} \choose n_{0,1}} ((1-p)\cdot q)^{n_{0,1}} 
-  {n - n_{1,1} - n_{1,0} -n_{0,1} \choose n_{0,0}} ((1-p)\cdot (1-q))^{n_{0,0}}$$
-\end{split}
+\\
 
+\begin{center}
+\scalebox{0.85}{
+$P(Target, Feature) = (0,1)) = (1-p) \cdot q$
+}
+\end{center}
 
-This distribution comes with two constraints:
-$n_{1,\cdot} = n_{1,1} + n_{1,0}$ and
-$n_{\cdot, 1} = n_{1,1} + n_{0,1}$.
-Thus, conditioning on $n_{1,1}$, we get hypergeometric distribution.
+\\
 
-This is in fact exact two-sided Fisher's test. Information Gain is used here 
-as a way of deciding which contingency tables are more extreme.
+\begin{center}
+\scalebox{0.85}{
+$P(Target, Feature) = (0,0)) = (1-p) \cdot (1-q)$
+}
+\end{center}
+
+\\
+
+Where $p$ and $q$ are fractions of positive observations in target and
+feature respectively. Another view at permutation test is therefore that we 
+get a contingency table, which is to be tested for independance.
+Computing probability of such a table with two constraints, $n_{1,\cdot} = n_{1,1} + n_{1,0}$ and
+$n_{\cdot, 1} = n_{1,1} + n_{0,1}$, and 
+conditioning on $n_{1,1}$, leads to hypergeometric distribution.
+
+This is in fact exact two-sided Fisher's test. Information Gain is a way
+of deciding how strong is the evidence against independance.
 
 \end{block}
 \vfill 
