@@ -122,7 +122,7 @@ poster_theme <- theme(plot.background=element_rect(fill = "transparent",
     \begin{block}{Organization of signal peptide}
       \begin{figure}[ht]
         \centering
-        \scalebox{1.3}{
+        \scalebox{1.34}{
           \includegraphics{SP.png}
         }
       \end{figure}
@@ -233,7 +233,7 @@ print(tabAminokwasow(aa5, c("Positively charged", "Nonpolar and aliphatic",
     
     \begin{block}{Validation results}
     \begin{figure}
-    \scalebox{0.89}{    
+    \scalebox{0.86}{    
 <<echo = FALSE,message=FALSE,fig.width=14,fig.align='center'>>=
 metrics <- t(poster_data[["metrics"]][c("AUC", "H", "Gini", "Recall", "Spec", "Precision"), ])
 melted_metrics <- do.call(rbind, lapply(1L:ncol(metrics), function(i)
@@ -253,7 +253,7 @@ ggplot(melted_metrics, aes(x = metric, y = value)) +
 The mean AUC obtained in the cross-validation is  \Sexpr{round(mean(unlist(poster_data[["metrics"]]["AUC", ])), 4)}
     
     \begin{figure}
-    \scalebox{0.89}{    
+    \scalebox{0.86}{    
 <<echo = FALSE,message=FALSE,fig.width=14,fig.align='center'>>=
 position_data <- poster_data[["position_table"]]
 position_data[["Freq"]] <- position_data[["Freq"]]/sum(position_data[["Freq"]])
@@ -274,7 +274,7 @@ ggplot(position_data_plot, aes(x = Var1, y = Freq)) +
     }
     \end{figure}
     
-The mean absolute cleavage site misplacement (MAM) is \Sexpr{round(poster_data[["mean"]], 4)}.
+The mean absolute cleavage site misplacement (MAM) (mean absolute distance between real clave site and predicted cleavage site) is \Sexpr{round(poster_data[["mean"]], 4)}.
     
     \end{block}
     \vfill
