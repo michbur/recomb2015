@@ -118,7 +118,7 @@ poster_theme <- theme(plot.background=element_rect(fill = "transparent",
     \begin{block}{Introduction}
       N-grams (k-tuples) are vectors of n characters derived from input sequence(s). They may form continuous sub-sequences or be discontinuous. Another important n-gram parameter is its position. Instead of just counting n-grams, one may want to count how many n-grams occur at a given position in multiple (e.g. related) sequences.
 
-Originally developed for natural language processing, n-grams are also used in proteomics, genomics and transcriptomics.
+Originally developed for natural language processing, n-grams are also used in proteomics, genomics~\citep{fang_2011} and transcriptomics.
 
 \small{
        \begin{columns}[c] % the "c" option specifies center vertical alignment
