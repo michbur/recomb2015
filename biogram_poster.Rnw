@@ -140,7 +140,7 @@ tfres <- function(x, cn = c("1-ngram", "2-gram", "3-gram"),
 sample_seq <- matrix(sample(1L:4, 18, replace = TRUE), nrow = 3)
 colnames(sample_seq) <- paste0("P", 1L:ncol(sample_seq))
 rownames(sample_seq) <- paste0("S", 1L:nrow(sample_seq))
-print(xtable(data.frame(sample_seq), caption = "Sample sequences.", digits = 0))
+print(xtable(data.frame(sample_seq), caption = "Sample sequences.  S - sequence, P - postion.", digits = 0))
 
 # unis <- count_ngrams(sample_seq, 1, 1L:4, pos = TRUE)
 # unis <- data.frame(as.matrix(unis))[, 1L:7]
@@ -157,7 +157,8 @@ print(xtable(data.frame(sample_seq), caption = "Sample sequences.", digits = 0))
      unis <- count_ngrams(sample_seq, 1, 1L:4)
 unis <- data.frame(as.matrix(unis))
 colnames(unis) <- 1L:4
-print(xtable(unis, caption = "Unigram counts.", digits = 0), include.rownames = FALSE)
+rownames(unis) <- paste0("S", 1L:nrow(sample_seq))
+print(xtable(unis, caption = "Unigram counts.", digits = 0), include.rownames = TRUE)
 @
 
     \end{columns}
@@ -167,7 +168,8 @@ print(xtable(unis, caption = "Unigram counts.", digits = 0), include.rownames = 
 unis <- count_ngrams(sample_seq, 1, 1L:4, pos = TRUE)
 unis <- data.frame(as.matrix(unis))[, 1L:13]
 colnames(unis) <- substr(sub("X", "P", colnames(unis)), 0, 4)
-print(xtable(unis, caption = "A fraction of possible unigrams with position information.", digits = 0), include.rownames = FALSE)
+rownames(unis) <- paste0("S", 1L:nrow(sample_seq))
+print(xtable(unis, caption = "A fraction of possible unigrams with position information.", digits = 0), include.rownames = TRUE)
 @
 }    
     \end{block}
@@ -192,7 +194,7 @@ $
 \\
 
 
-\scalebox{0.85}{  
+\scalebox{0.90}{  
 <<echo = FALSE,message=FALSE,fig.align='center',fig.width=14>>=
 library(reshape2)
 n <- 1:6
@@ -367,7 +369,7 @@ can be computed exactly.
 
 \begin{block}{Power and False discoveries}
     \centering
-\scalebox{1}{  
+\scalebox{0.9}{  
 <<echo = FALSE,message=FALSE,fig.align='center', fig.width=15>>=
 three_n_power <- three_n_power[sapply(three_n_power, function(i) i[[6]][[3]][2]) > 150]
 
@@ -430,7 +432,7 @@ It is especially useful when very precise p-values are required and features are
         \begin{block}{Avaibility}
         \footnotesize{
       
-      QuiPT is a part of biogram R package devoted to the analysis of n-grams extracted from biological sequences: 
+      QuiPT is a part of \textbf{biogram} R package devoted to the analysis of n-grams extracted from biological sequences: 
       
       \url{http://cran.r-project.org/web/packages/biogram/}
         }
