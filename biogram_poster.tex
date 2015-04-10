@@ -153,16 +153,16 @@ Originally developed for natural language processing, n-grams are also used in g
        \begin{columns}[c] % the "c" option specifies center vertical alignment
     \column{.5\textwidth} 
 % latex table generated in R 3.1.3 by xtable 1.7-4 package
-% Fri Apr 10 08:42:26 2015
+% Fri Apr 10 10:14:08 2015
 \begin{table}[ht]
 \centering
 \begin{tabular}{rrrrrrr}
   \hline
  & P1 & P2 & P3 & P4 & P5 & P6 \\ 
   \hline
-S1 & 1 & 2 & 4 & 3 & 3 & 1 \\ 
-  S2 & 2 & 4 & 2 & 1 & 2 & 3 \\ 
-  S3 & 4 & 3 & 3 & 3 & 1 & 4 \\ 
+S1 & 1 & 3 & 3 & 4 & 4 & 1 \\ 
+  S2 & 3 & 2 & 4 & 2 & 1 & 1 \\ 
+  S3 & 2 & 1 & 3 & 1 & 1 & 4 \\ 
    \hline
 \end{tabular}
 \caption{Sample sequences.} 
@@ -175,16 +175,16 @@ S1 & 1 & 2 & 4 & 3 & 3 & 1 \\
     \column{.5\textwidth}
     
 % latex table generated in R 3.1.3 by xtable 1.7-4 package
-% Fri Apr 10 08:42:26 2015
+% Fri Apr 10 10:14:08 2015
 \begin{table}[ht]
 \centering
 \begin{tabular}{rrrr}
   \hline
 1 & 2 & 3 & 4 \\ 
   \hline
-2 & 1 & 2 & 1 \\ 
-  1 & 3 & 1 & 1 \\ 
-  1 & 0 & 3 & 2 \\ 
+2 & 0 & 2 & 2 \\ 
+  2 & 2 & 1 & 1 \\ 
+  3 & 1 & 1 & 1 \\ 
    \hline
 \end{tabular}
 \caption{Unigram counts.} 
@@ -194,16 +194,16 @@ S1 & 1 & 2 & 4 & 3 & 3 & 1 \\
     \end{columns}
 
 % latex table generated in R 3.1.3 by xtable 1.7-4 package
-% Fri Apr 10 08:42:26 2015
+% Fri Apr 10 10:14:08 2015
 \begin{table}[ht]
 \centering
 \begin{tabular}{rrrrrrrrrrrrr}
   \hline
 P1\_1 & P2\_1 & P3\_1 & P4\_1 & P5\_1 & P6\_1 & P1\_2 & P2\_2 & P3\_2 & P4\_2 & P5\_2 & P6\_2 & P1\_3 \\ 
   \hline
-1 & 0 & 0 & 0 & 0 & 1 & 0 & 1 & 0 & 0 & 0 & 0 & 0 \\ 
-  0 & 0 & 0 & 1 & 0 & 0 & 1 & 0 & 1 & 0 & 1 & 0 & 0 \\ 
-  0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ 
+1 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ 
+  0 & 0 & 0 & 0 & 1 & 1 & 0 & 1 & 0 & 1 & 0 & 0 & 1 \\ 
+  0 & 1 & 0 & 1 & 1 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 \\ 
    \hline
 \end{tabular}
 \caption{A fraction of possible unigrams with position information.} 
@@ -350,16 +350,21 @@ p-values with accuracy of $0.05 \times 10^{-5}$. This requires at least
 requires computation of a test statistic. Since n-gram features are very sparse vectors, QuiPT needs to evaluate only few contingency tables.
 
 The relative difference in speed between QuiPT and normal permutation tests depends on several factors, as a number of permutations and input data. For example, for simulation scheme presented below, QuiPT was on average 93 times faster than normal permutation test with $10^5$ permutations.
+
 \end{block}
 \vfill 
     
-    \begin{block}{Contingency table representation}
-    
-    
-    \begin{columns}
-    \centering
-    \column{.5\textwidth} 
-    \scalebox{1}{
+\begin{block}{Distribution of Information Gain for given contingency table}
+
+\begin{columns}
+\column{.04\textwidth}
+\column{.35\textwidth}
+\centering
+Given constraint on $n_{1,1} + n_{0,1}$, probability distribution on
+contingency tables, which permutations might produce, 
+can be computed exactly.
+\column{.65\textwidth}
+\scalebox{0.79}{
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}
 
@@ -371,55 +376,12 @@ The relative difference in speed between QuiPT and normal permutation tests depe
 
 \end{knitrout}
 }
-\column{.5\textwidth}
-% latex table generated in R 3.1.3 by xtable 1.7-4 package
-% Fri Apr 10 08:42:27 2015
-\begin{table}[ht]
-\centering
-\begin{tabular}{|c|ccc|}
-  \hline
- & Target & Feature & Freq \\ 
-  \hline
-1 & 0 & 0 &  40 \\ 
-  2 & 1 & 0 &  10 \\ 
-  3 & 0 & 1 &  25 \\ 
-  4 & 1 & 1 &  40 \\ 
-   \hline
-\end{tabular}
-\end{table}
-
-    \end{columns}
-    
-    \end{block}
-    \vfill
-    
-%     \begin{block}{Test power}
-%     \centering
-% \scalebox{0.95}{  
-% <<echo = FALSE,message=FALSE,eval=FALSE,fig.align='center'>>=
-% 
-% three_n_power <- three_n_power[sapply(three_n_power, function(i) i[[6]][[3]][2]) > 150]
-% 
-% power <- Reduce("+", lapply(three_n_power, function(single_rep) {
-%   #single replication dat
-%   sr_dat <- do.call(rbind, lapply(single_rep, unlist))
-%   sr_dat[, c(1, 3, 5)]/matrix(rep(c(4, 32, 192), 6), nrow = 6, byrow = TRUE)
-% }))/length(three_n_power)
-% 
-% ggplot(tfres(power), aes(x = ngram, y = value, fill = sig)) + 
-%   geom_bar(stat = "identity", position = "dodge") +
-%   scale_y_continuous("Important features found (%)") +
-%   scale_x_discrete("n-gram") +
-%   scale_fill_discrete("Signal strength") +
-%   poster_theme
-% 
-% 
-% @
-% }
-% \end{block}
-%     \vfill
+\end{columns}
+\end{block}
+\vfill
 
 \begin{block}{Simulation scheme - genomics}
+
 \begin{enumerate}[1.]
 \item Random 4000 sequences (20 nucleotides each). The half of the sequences has label 0.
 \item Choose a single position between 3 and 18 (to avoid border cases).
@@ -428,8 +390,9 @@ The relative difference in speed between QuiPT and normal permutation tests depe
 \item Iterate steps 1-4 over other values of $p_d$ - 0.38, 0.51, 0.65, 0.78, 0.91.
 \item Repeat steps 1-5 200 times.
 \end{enumerate}
-    \end{block}
-    \vfill
+    
+\end{block}
+\vfill
 
 \begin{block}{Power and False discoveries}
     \centering
@@ -437,7 +400,7 @@ The relative difference in speed between QuiPT and normal permutation tests depe
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}
 
-{\centering \includegraphics[width=\maxwidth]{figure/unnamed-chunk-7-1} 
+{\centering \includegraphics[width=\maxwidth]{figure/unnamed-chunk-6-1} 
 
 }
 
@@ -451,10 +414,12 @@ The relative difference in speed between QuiPT and normal permutation tests depe
     \vfill
       
      
-    \begin{block}{Summary}
-      Quick permutation test is a powerful and quick equivalent of permutation test in binary feature-binary target testing scenario.
-    \end{block}
-    \vfill 
+\begin{block}{Summary}
+
+Quick permutation test is a powerful and quick equivalent of permutation test in binary feature-binary target testing scenario.
+It is especially useful when very precise p-values are required and features are sparse vectors.
+\end{block}
+\vfill 
     
         \begin{block}{Avaibility}
         \footnotesize{
