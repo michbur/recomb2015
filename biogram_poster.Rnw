@@ -178,7 +178,7 @@ print(xtable(unis, caption = "A fraction of possible unigrams with position info
     
     \begin{block}{Curse of dimensionality}
     
-Even when we limit ourselves to only continuous positioned n-grams, build on $m$ possible
+Even when we limit ourselves to only continuous positioned n-grams build on $m$ possible
 characters, feature space growths rapidly with the number of elements in n-gram
 ($n$) and the length of the sequence ($L$).    
     
@@ -233,7 +233,7 @@ $
 
 where $N_{T_P > T_R}$ is number of times when $T_P$ (permuted test statistic) was more extreme than $T_R$ (test statistic for non-permuted data).
 
-Permutation tests are computationally expensive (especially considering precise estimation of low p-values, because the number of permutations is inversely proportional to the interval between p-values).
+Permutation tests are computationally expensive (especially considering precise estimation of small p-values, because the number of permutations is inversely proportional to the interval between p-values).
       
     \end{block}
     \vfill
@@ -241,7 +241,7 @@ Permutation tests are computationally expensive (especially considering precise 
     
 \begin{block}{QuiPT concept}
 
-In each permutation, for every observation, there are four possible results.
+In each permutation, for every observation, there are four possible results:
 
 \begin{center}
 \scalebox{0.85}{
@@ -309,7 +309,7 @@ This is in fact exact two-sided Fisher's test~\citep{lehmann1986testing}.
 \begin{block}{Computational cost}
 
 The cost of performing QuiPT is equal to computing a test statistic and 
-probability of occurence for $n_{1,1} + n_{0,1}$ contingency tables.
+probability of occurrence for $n_{1,1} + n_{0,1}$ contingency tables.
 
 Suppose we consider 6-grams build on sequences of length 25 build of four 
 characters. Then there are around 100,000 n-grams (features) to test. 
@@ -358,7 +358,7 @@ can be computed exactly.
 \begin{enumerate}[1.]
 \item Random 4000 sequences (20 nucleotides each). The half of the sequences has label 0.
 \item Choose a single position between 3 and 18 (to avoid border cases).
-\item Resample nucleotides at chosen position. The dominant nucletoide has probabilitiy of occurence $p_d = 0.25$. Other nucleotides have probability of occurence $p_o = (1 - p_d)/3  $. 
+\item Resample nucleotides at chosen position. The dominant nucleotide has probability of occurrence $p_d = 0.25$. Other nucleotides have probability of occurrence $p_o = (1 - p_d)/3  $. 
 \item Perform QuiPT (Information Gain as test statistic) and choose significant features (with p-value $< 0.001$).
 \item Iterate steps 1-4 over other values of $p_d$ - 0.38, 0.51, 0.65, 0.78, 0.91.
 \item Repeat steps 1-5 200 times.
@@ -424,8 +424,8 @@ p +   geom_abline(intercept=1.5, slope=0.0, color="#666666", size=5)
      
 \begin{block}{Summary}
 
-Quick permutation test is a powerful and quick equivalent of permutation test in binary feature-binary target testing scenario.
-It is especially useful when very precise p-values are required and features are sparse vectors.
+Quick permutation test is a powerful and quick equivalent of permutation test in a binary feature -- binary target testing scenario.
+It is especially useful when precisely computed p-values are required and features are sparse vectors.
 \end{block}
 \vfill 
     
